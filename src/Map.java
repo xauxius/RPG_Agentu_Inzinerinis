@@ -73,6 +73,7 @@ public class Map {
                 moveEntity(ent, dir);
             }
         }
+        return false;
     }
 
     boolean moveEntity(Entity entity, Dirs dir){
