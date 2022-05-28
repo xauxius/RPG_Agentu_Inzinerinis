@@ -106,11 +106,14 @@ public class DMsProvider extends Agent {
 
             if (received != null){
                 try{
-                    String cont = received.getContent();
                     ContentElement c = cm.extractContent(received);
 
                     if (c instanceof FindDungeonMasters){
                         FindDungeonMasters fDM = (FindDungeonMasters) c;
+                        DungeonMastersListResponse list = processRequestForDMs(fDM);
+                        ACLMessage messResp = formMSG(received.getSender());
+                        cm.fillContent(messResp, list);
+                        send(messResp);
                     }
                     else if (c instanceof  RegisterDMResponse){
                         RegisterDMResponse resp = (RegisterDMResponse) c;
