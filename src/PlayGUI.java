@@ -98,11 +98,13 @@ public class PlayGUI extends GuiAgent {
     class SearchForProvider extends OneShotBehaviour{
         @Override
         public void action() {
-            try{
-                SearchForService();
-            }
-            catch (FIPAException ex){
-                ex.printStackTrace();
+            while (DMsProvider == null){ //Kebloka vieta gali but su situo, nes nezinia kada null kada ne jis gali but
+                try{
+                    SearchForService();
+                }
+                catch (FIPAException ex){
+                    ex.printStackTrace();
+                }
             }
         }
         private void SearchForService() throws FIPAException
