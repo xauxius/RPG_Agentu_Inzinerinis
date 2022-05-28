@@ -141,12 +141,12 @@ public class PlayGUI extends GuiAgent {
                     System.out.println("A["+getLocalName()+"] Message received " +c);
                     if (c instanceof DungeonMastersListResponse){
                         DungeonMastersListResponse dmsList = (DungeonMastersListResponse) c;
-                        Iterator dmIter = (Iterator) dmsList.getDMsList();
-                        String[] DungeonMastersNames = new String[]{};
+                        Iterator dmIter =  dmsList.getAllDMsList();
+                        String[] DungeonMastersNames = new String[100];
                         int i = 0;
                         while (dmIter.hasNext()){
                             availableDMs.add((DungeonMaster) dmIter.next());
-                            DungeonMastersNames[i] = availableDMs.get(i).getName() ;
+                            DungeonMastersNames[i] = availableDMs.get(i).getName();
                             i++;
                         }
                         if(i == 0){
