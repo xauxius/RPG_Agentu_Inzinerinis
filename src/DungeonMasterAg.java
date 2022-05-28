@@ -19,7 +19,7 @@ public class DungeonMasterAg extends Agent{
     boolean isStarted = false;
     Map map;
     ArrayList<AID> activeCharacters = new ArrayList<>();
-    ArrayList<AID> activePlayers = new ArrayList<>();
+    AID player;
     ArrayList<AID> bots = new ArrayList<>();
     String description;
     String difficulty;
@@ -32,7 +32,6 @@ public class DungeonMasterAg extends Agent{
     public void setup(){
         processArgs();
         addBehaviour(new AssignService(this, Config.DM));
-        addBehaviour(new LaunchGame());
 
     }
 
@@ -122,8 +121,8 @@ public class DungeonMasterAg extends Agent{
                 GameActionResponse resp = new GameActionResponse();
                 if (!isStarted){
                     resp.setSuccess(true);
-                    agent.activePlayers.add(sender);
-                    agent.addBehaviour(new LaunchGame());
+                    player = sender;
+                    agent.addBehaviour(new LaunchGame(agent));
                 }
                 else{
                     resp.setSuccess(false);
@@ -143,6 +142,10 @@ public class DungeonMasterAg extends Agent{
 
     //Launches bot agents, prepares map if necesary
     class LaunchGame extends OneShotBehaviour{
+        DungeonMasterAg dm;
+        public LaunchGame(DungeonMasterAg dm){
+            this.dm = dm;
+        }
         @Override
         public void action(){
             AgentContainer cont = myAgent.getContainerController();
@@ -157,32 +160,12 @@ public class DungeonMasterAg extends Agent{
                 }
             }
 
-            System.out.println(activePlayers.get(0));
-            map = new Map(activePlayers, bots);
-            System.out.println(map);
-            map.moveEntityByAID(activePlayers.get(0), Map.Dirs.Up);
-            map.moveEntityByAID(activePlayers.get(0), Map.Dirs.Up);
-            map.moveEntityByAID(activePlayers.get(0), Map.Dirs.Right);
-            System.out.println(map);
-
-
+            map = new Map(player, bots, dm);
         }
     }
     //----
 
     //--Simple Methods--
-
-    void addPlayer(){//Bad, will delete later
-        AgentContainer cont = this.getContainerController();
-        try{
-            AgentController player = cont.createNewAgent("Player", "PlayGUI", new Object[0]);
-            player.start();
-            activePlayers.add(new AID(player.getName(), AID.ISLOCALNAME));
-        }
-        catch (Exception e){
-            say("Something ain't right");
-        }
-    }
 
     public ContentManager getCM(){
         Ontology onto = RPGOntology.getInstance();
