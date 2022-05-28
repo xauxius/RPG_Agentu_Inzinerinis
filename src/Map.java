@@ -1,4 +1,3 @@
-import RPG.ontology.DungeonMaster;
 import jade.core.AID;
 
 import java.util.ArrayList;
@@ -13,7 +12,6 @@ public class Map {
     static String Wall = "x";
     static String Ground = ".";
     static String Enemy = "E";
-    DungeonMasterAg dm;
 
     ArrayList<Entity> entities = new ArrayList<Entity>();
 
@@ -30,13 +28,25 @@ public class Map {
             {Wall, Wall, Wall, Wall, Wall, Wall, Wall}
     };
 
-    public Map(AID player, ArrayList<AID> bots, DungeonMasterAg dm){
-        this.dm = dm;
+    public Map(ArrayList<AID> players, ArrayList<AID> bots){
         N = mapSkelet.length;
         M = mapSkelet[0].length;
         int playI = 8;
-        int playJ = 3;
-        entities.add(new Entity(player, EntType.Player, playI, playJ, "P"));
+        for (int i = 0; i < players.size(); i++){
+            int j = 1;
+            switch (i){
+                case 0:
+                    j = 1;
+                    break;
+                case 1:
+                    j = 3;
+                    break;
+                case 2:
+                    j =5;
+                    break;
+            }
+            entities.add(new Entity(players.get(i), EntType.Player, playI, j, Integer.toString(i)));
+        }
         entities.add(new Entity(bots.get(0), EntType.Bot, 1, 1, Enemy));
         entities.add(new Entity(bots.get(1), EntType.Bot, 1, 3, Enemy));
         entities.add(new Entity(bots.get(2), EntType.Bot, 1, 5, Enemy));
@@ -144,4 +154,18 @@ public class Map {
         return str;
     }
 
+    public static void main(String[] args) {
+        ArrayList<AID> players = new ArrayList<>();
+        ArrayList<AID> bots = new ArrayList<>();
+        players.add(null);
+        players.add(null);
+        bots.add(null);
+        bots.add(null);
+        bots.add(null);
+        bots.add(null);
+        bots.add(null);
+        Map map = new Map(players, bots);
+
+        System.out.println(map);
+    }
 }

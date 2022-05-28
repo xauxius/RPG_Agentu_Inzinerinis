@@ -152,7 +152,7 @@ public class DMsProvider extends Agent {
     public ACLMessage formMSG(AID sendTO){
         Ontology onto = RPGOntology.getInstance();
         Codec codec = new SLCodec();
-        ACLMessage omsg = new ACLMessage(ACLMessage.REQUEST);
+        ACLMessage omsg = new ACLMessage(ACLMessage.INFORM);
         omsg.setLanguage(codec.getName());
         omsg.setOntology(onto.getName());
         omsg.clearAllReceiver();

@@ -1,3 +1,5 @@
+import jade.gui.GuiEvent;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -10,15 +12,16 @@ import java.io.IOException;
  */
 public class GameGUI extends javax.swing.JFrame {
 
-    /**
-     * Creates new form gui
-     */
-    public GameGUI() {
+    PlayGUI myAgent;
+    public GameGUI(PlayGUI a) {
+        myAgent = a;
         initComponents();
-        System.out.println("frame width : "+getWidth());
-        System.out.println("frame height: "+getHeight());
-        System.out.println("content pane width : "+getContentPane().getWidth());
-        System.out.println("content pane height: "+getContentPane().getHeight());
+    }
+    public void ChangeSelection(String[] strings){
+        ActionsList.setModel(new javax.swing.AbstractListModel<String>() {
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
     }
 
     /**
@@ -83,7 +86,7 @@ public class GameGUI extends javax.swing.JFrame {
         jScrollPane2.setViewportView(MapTextArea);
 
         ActionsList.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            String[] strings = { "Easy", "Medium", "Hard"};
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
@@ -187,43 +190,61 @@ public class GameGUI extends javax.swing.JFrame {
 
     private void ActionButtonActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
-        LivesNumber.setText("1");
-    }
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(GameGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(GameGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(GameGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(GameGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        if(PlayGUI.STATUS == PlayGUI.DIFFICULTY){
+            GuiEvent ge = new GuiEvent(this, PlayGUI.DIFFICULTY);
+            ge.addParameter(ActionsList.getSelectedValue());
+            PlayGUI.STATUS = 2;
+            myAgent.postGuiEvent(ge);
         }
-        //</editor-fold>
+        else if(PlayGUI.STATUS == PlayGUI.DM){
+            GuiEvent ge = new GuiEvent(this, PlayGUI.DM);
+            ge.addParameter(ActionsList.getSelectedValue());
+            PlayGUI.STATUS = 3;
+            myAgent.postGuiEvent(ge);
+        }
+        else if(PlayGUI.STATUS == PlayGUI.GAMING){
+            GuiEvent ge = new GuiEvent(this, PlayGUI.GAMING);
+            ge.addParameter(ActionsList.getSelectedValue()); // Or get selected index
+            myAgent.postGuiEvent(ge);
+        }
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new GameGUI().setVisible(true);
-            }
-        });
+
     }
+
+//    /**
+//     * @param args the command line arguments
+//     */
+//    public static void main(String args[]) {
+//        /* Set the Nimbus look and feel */
+//        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+//        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+//         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
+//         */
+//        try {
+//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+//                if ("Nimbus".equals(info.getName())) {
+//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+//                    break;
+//                }
+//            }
+//        } catch (ClassNotFoundException ex) {
+//            java.util.logging.Logger.getLogger(GameGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (InstantiationException ex) {
+//            java.util.logging.Logger.getLogger(GameGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (IllegalAccessException ex) {
+//            java.util.logging.Logger.getLogger(GameGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+//            java.util.logging.Logger.getLogger(GameGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        }
+//        //</editor-fold>
+//
+//        /* Create and display the form */
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//                new GameGUI().setVisible(true);
+//            }
+//        });
+//    }
 
     // Variables declaration - do not modify
     private javax.swing.JButton ActionButton;

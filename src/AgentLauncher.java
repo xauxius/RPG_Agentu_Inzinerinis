@@ -8,7 +8,8 @@ public class AgentLauncher extends Agent {
         AgentContainer cont = this.getContainerController();
         try{
             cont.createNewAgent("Player", "PlayGUI", new Object[0]).start();
-            cont.createNewAgent("DM1", "DungeonMasterAg", new Object[0]).start();
+            String[] args1 = {"Easy", "As nepiktas masteris"};
+            cont.createNewAgent("DM1", "DungeonMasterAg", args1).start();
             cont.createNewAgent("DMsProvider", "DMsProvider", new Object[0]).start();
         }
         catch (Exception e){

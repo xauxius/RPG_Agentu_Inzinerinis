@@ -21,23 +21,48 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class PlayGUI extends GuiAgent {
+    public static int STATUS = 0;
+    public static final int DIFFICULTY=1;
+    public static final int DM=2;
+    public static final int GAMING=3;
+    public static final int WIN=4;
+    public static final int LOST=5;
     //--Variables--
+
     GameGUI myGui = null;
     ArrayList<DungeonMaster> availableDMs = new ArrayList<>();
     AID DMsProvider;
+    String[] DifficultiesSelection = new String[]{"Easy", "Medium", "Hard"};
     @Override
     public void setup()
     {
         addBehaviour(new AssignService(this, Config.Player));
         addBehaviour(new SearchForProvider());
         System.out.println("A[" + getLocalName() + "] Welcome to agent with GUI");
-        myGui = new GameGUI();
+        myGui = new GameGUI(this);
         myGui.setVisible(true);
+        myGui.ChangeSelection(DifficultiesSelection);
+        STATUS = 1;
+        addBehaviour(new ProcessDMList(this));
     }
     //----
 
     @Override
-    protected void onGuiEvent(GuiEvent guiEvent) {
+    protected void onGuiEvent(GuiEvent ge) {
+        int cmd = ge.getType();
+        if (cmd == PlayGUI.DIFFICULTY){
+            // Kas ivyksta pasirinkus difficulty
+            availableDMs = new ArrayList<>();
+            System.out.println("A["+getLocalName()+"] Difficulty: " +ge.getParameter(0).toString());
+            addBehaviour(new InitiateDMSearch(this, ge.getParameter(0).toString()));
+
+        }
+        else if (cmd == PlayGUI.DM){
+            // Kas 5vyksta pasirinkus Dungeon Masteri
+        }
+        else if (cmd == PlayGUI.GAMING){
+            // Kas 5vyksta pasirinkus ejima zaidime
+        }
 
     }
 
@@ -45,8 +70,10 @@ public class PlayGUI extends GuiAgent {
     //--Behaviours--
     class InitiateDMSearch extends OneShotBehaviour { //Reiks su GUI sujungt jog diff pasirinkt (maybe)
         PlayGUI agent;
-        public InitiateDMSearch(PlayGUI agent){
+        String difficulty = "";
+        public InitiateDMSearch(PlayGUI agent, String difficulty){
             this.agent = agent;
+            this.difficulty = difficulty;
         }
 
         @Override
@@ -54,7 +81,7 @@ public class PlayGUI extends GuiAgent {
             ContentManager cm = agent.getCM();
             ACLMessage msg = agent.formMSG(agent.DMsProvider);
             FindDungeonMasters fDM = new FindDungeonMasters();
-            fDM.setDifficulty(Config.Easy);//
+            fDM.setDifficulty(difficulty);
             try{
                 cm.fillContent(msg, fDM);
                 send(msg);
@@ -110,18 +137,32 @@ public class PlayGUI extends GuiAgent {
                 ContentManager cm = agent.getCM();
                 try{
                     ContentElement c = cm.extractContent(msg);
+
+                    System.out.println("A["+getLocalName()+"] Message received " +c);
                     if (c instanceof DungeonMastersListResponse){
                         DungeonMastersListResponse dmsList = (DungeonMastersListResponse) c;
                         Iterator dmIter = (Iterator) dmsList.getDMsList();
+                        String[] DungeonMastersNames = new String[]{};
+                        int i = 0;
                         while (dmIter.hasNext()){
                             availableDMs.add((DungeonMaster) dmIter.next());
+                            DungeonMastersNames[i] = availableDMs.get(i).getName() ;
+                            i++;
                         }
+                        if(i == 0){
+                            System.out.println("Dungeon masters nerasta");
+                            myGui.ChangeSelection(new String[] {"Dungeon masters pasirinkto lygio nera, Pasirinkite kita..."});
+                        }
+                        else{
+                            myGui.ChangeSelection(DungeonMastersNames);
+                            System.out.println("Dungeon masters names listed");
+                        }
+
                     }
                 }
                 catch (Exception ex){
                     System.out.println("Sad thing at dm list");
                 }
-
             }
         }
     }

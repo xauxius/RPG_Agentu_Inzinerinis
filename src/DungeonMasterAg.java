@@ -9,7 +9,6 @@ import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.core.behaviours.OneShotBehaviour;
 import jade.lang.acl.ACLMessage;
-import jade.lang.acl.MessageTemplate;
 import jade.wrapper.*;
 
 import java.util.ArrayList;
@@ -19,12 +18,10 @@ public class DungeonMasterAg extends Agent{
     boolean isStarted = false;
     Map map;
     ArrayList<AID> activeCharacters = new ArrayList<>();
-    AID player;
+    ArrayList<AID> activePlayers = new ArrayList<>();
     ArrayList<AID> bots = new ArrayList<>();
     String description;
     String difficulty;
-    int turn;
-    boolean waitingForResp;
     ArrayList<NPC> viableBots = new ArrayList<>();
     //----
 
@@ -33,6 +30,8 @@ public class DungeonMasterAg extends Agent{
     public void setup(){
         processArgs();
         addBehaviour(new AssignService(this, Config.DM));
+        addBehaviour(new LaunchGame());
+
     }
 
     void processArgs(){
@@ -49,7 +48,7 @@ public class DungeonMasterAg extends Agent{
     class MainLoop extends CyclicBehaviour{ //Needs implementing: waiting for player, initiating the game
         DungeonMasterAg agent;
         ContentManager cm;
-
+        boolean isStarted;
         public MainLoop(DungeonMasterAg agent){
             this.agent = agent;
             cm = agent.getCM();
@@ -68,9 +67,8 @@ public class DungeonMasterAg extends Agent{
             }
         }
 
-        void processRequestMessages(){
-            MessageTemplate template = MessageTemplate.MatchPerformative(ACLMessage.REQUEST); // Reik sutikrint jog tie du tikrai REQUEST siuncia
-            ACLMessage mess = agent.receive(template);
+        void processMessages(){
+            ACLMessage mess = agent.receive();
 
             if (mess != null){
                 try{
@@ -120,8 +118,8 @@ public class DungeonMasterAg extends Agent{
                 GameActionResponse resp = new GameActionResponse();
                 if (!isStarted){
                     resp.setSuccess(true);
-                    player = sender;
-                    agent.addBehaviour(new LaunchGame(agent));
+                    agent.activePlayers.add(sender);
+                    agent.addBehaviour(new LaunchGame());
                 }
                 else{
                     resp.setSuccess(false);
@@ -141,15 +139,8 @@ public class DungeonMasterAg extends Agent{
 
     //Launches bot agents, prepares map if necesary
     class LaunchGame extends OneShotBehaviour{
-        DungeonMasterAg agent;
-        public LaunchGame(DungeonMasterAg agent){
-            this.agent = agent;
-        }
-
         @Override
         public void action(){
-            turn = 0;
-            waitingForResp = true;
             AgentContainer cont = myAgent.getContainerController();
             for (int i = 0; i < 5; i++){
                 try{
@@ -161,30 +152,33 @@ public class DungeonMasterAg extends Agent{
                     say("Something ain't right");
                 }
             }
-            map = new Map(player, bots, agent);
-        }
-    }
+
+            System.out.println(activePlayers.get(0));
+            map = new Map(activePlayers, bots);
+            System.out.println(map);
+            map.moveEntityByAID(activePlayers.get(0), Map.Dirs.Up);
+            map.moveEntityByAID(activePlayers.get(0), Map.Dirs.Up);
+            map.moveEntityByAID(activePlayers.get(0), Map.Dirs.Right);
+            System.out.println(map);
 
 
-
-    class UpdateMap extends OneShotBehaviour{
-        @Override
-        public void action(){
-            try{
-                ContentManager cm = getCM();
-                ACLMessage mess = formMSG(player);
-                MapUpdater upMap = new MapUpdater();
-                upMap.setContent(map.toString());
-                cm.fillContent(mess, upMap);
-            }
-            catch (Exception ex){
-                say("troubles updating the map");
-            }
         }
     }
     //----
 
     //--Simple Methods--
+
+    void addPlayer(){//Bad, will delete later
+        AgentContainer cont = this.getContainerController();
+        try{
+            AgentController player = cont.createNewAgent("Player", "PlayGUI", new Object[0]);
+            player.start();
+            activePlayers.add(new AID(player.getName(), AID.ISLOCALNAME));
+        }
+        catch (Exception e){
+            say("Something ain't right");
+        }
+    }
 
     public ContentManager getCM(){
         Ontology onto = RPGOntology.getInstance();
@@ -213,5 +207,3 @@ public class DungeonMasterAg extends Agent{
     }
     //----
 }
-
-
