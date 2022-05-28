@@ -4,21 +4,21 @@ package RPG.ontology;
 import RPG.ontology.*;
 
 /**
-* Protege name: GameActionResponse
+* Protege name: Map
 * @author ontology bean generator
 * @version 2022/05/28, 19:07:58
 */
-public class GameActionResponse implements GameActionResponseIf {
+public class Map implements MapIf {
 
   private static final long serialVersionUID = 4465120161782918442L;
 
   private String _internalInstanceName = null;
 
-  public GameActionResponse() {
+  public Map() {
     this._internalInstanceName = "";
   }
 
-  public GameActionResponse(String instance_name) {
+  public Map(String instance_name) {
     this._internalInstanceName = instance_name;
   }
 
@@ -27,14 +27,14 @@ public class GameActionResponse implements GameActionResponseIf {
   }
 
    /**
-   * Protege name: Success
+   * Protege name: Content
    */
-   private boolean success;
-   public void setSuccess(boolean value) { 
-    this.success=value;
+   private String content;
+   public void setContent(String value) { 
+    this.content=value;
    }
-   public boolean getSuccess() {
-     return this.success;
+   public String getContent() {
+     return this.content;
    }
 
 }

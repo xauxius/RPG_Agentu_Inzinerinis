@@ -1,7 +1,14 @@
+import RPG.ontology.*;
+import jade.content.ContentElement;
+import jade.content.ContentManager;
+import jade.content.lang.Codec;
+import jade.content.lang.sl.SLCodec;
+import jade.content.onto.Ontology;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.core.behaviours.OneShotBehaviour;
+import jade.lang.acl.ACLMessage;
 import jade.wrapper.*;
 
 import java.util.ArrayList;
@@ -13,25 +20,105 @@ public class DungeonMasterAg extends Agent{
     ArrayList<AID> activeCharacters = new ArrayList<>();
     ArrayList<AID> activePlayers = new ArrayList<>();
     ArrayList<AID> bots = new ArrayList<>();
+    String description;
+    String difficulty;
     ArrayList<NPC> viableBots = new ArrayList<>();
     //----
 
 
     @Override
     public void setup(){
-        addPlayer();
         addBehaviour(new AssignService(this, Config.DM));
         addBehaviour(new LaunchGame());
     }
 
+    void processArgs(){
+        Object[] args = getArguments();
+        if ((args!=null) && (args.length>2))
+        {
+            difficulty = args[0].toString();
+            description = args[1].toString();
+        }
+    }
 
     //--Behaviour Classes--
     //Does all the neccesarry thing when game is waiting to be started
-    class processWaiting extends CyclicBehaviour{ //Needs implementing: waiting for player, initiating the game
+    class MainLoop extends CyclicBehaviour{ //Needs implementing: waiting for player, initiating the game
+        DungeonMasterAg agent;
+        ContentManager cm;
+        boolean isStarted;
+        public MainLoop(DungeonMasterAg agent){
+            this.agent = agent;
+            cm = agent.getCM();
+        }
 
         @Override
         public void action() { // If player wants to join add to the players,
+            processMessages();
 
+        }
+
+        void processMessages(){
+            ACLMessage mess = agent.receive();
+
+            if (mess != null){
+                try{
+                    ContentElement c = cm.extractContent(mess);
+                    if (c instanceof RequestToRegisterDM){
+                        manageRegister(mess.getSender());
+                    }
+                    if (c instanceof GameAction){
+                        GameAction ga = (GameAction) c;
+                        manageJoin(mess.getSender(), ga);
+                    }
+                }
+                catch (Exception ex){
+                    say("Something bad with gotten message");
+                }
+            }
+        }
+
+
+        void manageRegister(AID sender){
+            try{
+                RegisterDMResponse resp = new RegisterDMResponse();
+                DungeonMaster dm = new DungeonMaster();
+                dm.setDescription(agent.description);
+                dm.setDifficulty(agent.difficulty);
+                dm.setName(agent.getLocalName());
+                resp.setDM(dm);
+                ACLMessage messResp = agent.formMSG(sender);
+                cm.fillContent(messResp, resp);
+                agent.send(messResp);
+            }
+            catch (Exception ex){
+                say("could not register");
+            }
+
+
+        }
+
+        void manageJoin(AID sender, GameAction ga){
+            if (ga.getWantToJoin() == true){
+                GameActionResponse resp = new GameActionResponse();
+                if (!isStarted){
+                    resp.setSuccess(true);
+                    agent.activePlayers.add(sender);
+                    agent.addBehaviour(new LaunchGame());
+                }
+                else{
+                    resp.setSuccess(false);
+                }
+                ACLMessage respMess = agent.formMSG(sender);
+                try{
+                    cm.fillContent(respMess, resp);
+                    send(respMess);
+                }
+                catch (Exception ex){
+                    say("could not send join response");
+                }
+
+            }
         }
     }
 
@@ -62,23 +149,6 @@ public class DungeonMasterAg extends Agent{
 
         }
     }
-
-    class AddBot extends OneShotBehaviour{
-        @Override
-        public void action(){
-            AgentContainer cont = myAgent.getContainerController();
-            try{
-                AgentController bot = cont.createNewAgent("Goblin"+bots.size(), "NPC", new Object[0]);
-                bot.start();
-                bots.add(new AID(bot.getName(), AID.ISLOCALNAME));
-            }
-            catch (Exception e){
-                say("Something ain't right");
-            }
-
-        }
-    }
-
     //----
 
     //--Simple Methods--
@@ -93,6 +163,25 @@ public class DungeonMasterAg extends Agent{
         catch (Exception e){
             say("Something ain't right");
         }
+    }
+
+    public ContentManager getCM(){
+        Ontology onto = RPGOntology.getInstance();
+        Codec codec = new SLCodec();
+        ContentManager cm = getContentManager();
+        cm.registerLanguage(codec);
+        cm.registerOntology(onto);
+        return cm;
+    }
+    public ACLMessage formMSG(AID sendTO){
+        Ontology onto = RPGOntology.getInstance();
+        Codec codec = new SLCodec();
+        ACLMessage omsg = new ACLMessage(ACLMessage.INFORM);
+        omsg.setLanguage(codec.getName());
+        omsg.setOntology(onto.getName());
+        omsg.clearAllReceiver();
+        omsg.addReceiver(sendTO);
+        return omsg;
     }
 
     void say(String text){

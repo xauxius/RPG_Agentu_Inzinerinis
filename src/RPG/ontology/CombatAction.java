@@ -6,11 +6,11 @@ import RPG.ontology.*;
 /**
 * Protege name: CombatAction
 * @author ontology bean generator
-* @version 2022/05/28, 14:21:01
+* @version 2022/05/28, 19:07:58
 */
 public class CombatAction implements CombatActionIf {
 
-  private static final long serialVersionUID = -8611740379689045507L;
+  private static final long serialVersionUID = 4465120161782918442L;
 
   private String _internalInstanceName = null;
 

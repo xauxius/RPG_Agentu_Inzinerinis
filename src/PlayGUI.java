@@ -54,7 +54,7 @@ public class PlayGUI extends GuiAgent {
             ContentManager cm = agent.getCM();
             ACLMessage msg = agent.formMSG(agent.DMsProvider);
             FindDungeonMasters fDM = new FindDungeonMasters();
-            fDM.setDifficulty(Config.Easy);
+            fDM.setDifficulty(Config.Easy);//
             try{
                 cm.fillContent(msg, fDM);
                 send(msg);
