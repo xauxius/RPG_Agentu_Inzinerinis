@@ -7,11 +7,11 @@ import RPG.ontology.*;
 /**
 * Protege name: Situation
 * @author ontology bean generator
-* @version 2022/05/28, 20:55:15
+* @version 2022/05/28, 19:07:58
 */
 public class Situation implements SituationIf {
 
-  private static final long serialVersionUID = 1851734369498031622L;
+  private static final long serialVersionUID = 4465120161782918442L;
 
   private String _internalInstanceName = null;
 
