@@ -6,11 +6,11 @@ import RPG.ontology.*;
 /**
 * Protege name: GameAction
 * @author ontology bean generator
-* @version 2022/05/28, 12:55:16
+* @version 2022/05/28, 14:21:01
 */
 public class GameAction implements GameActionIf {
 
-  private static final long serialVersionUID = 1915207981401516286L;
+  private static final long serialVersionUID = -8611740379689045507L;
 
   private String _internalInstanceName = null;
 

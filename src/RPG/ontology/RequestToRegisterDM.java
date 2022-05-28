@@ -4,21 +4,21 @@ package RPG.ontology;
 import RPG.ontology.*;
 
 /**
-* Protege name: MoveAction
+* Protege name: RequestToRegisterDM
 * @author ontology bean generator
 * @version 2022/05/28, 14:21:01
 */
-public class MoveAction implements MoveActionIf {
+public class RequestToRegisterDM implements RequestToRegisterDMIf {
 
   private static final long serialVersionUID = -8611740379689045507L;
 
   private String _internalInstanceName = null;
 
-  public MoveAction() {
+  public RequestToRegisterDM() {
     this._internalInstanceName = "";
   }
 
-  public MoveAction(String instance_name) {
+  public RequestToRegisterDM(String instance_name) {
     this._internalInstanceName = instance_name;
   }
 
@@ -27,14 +27,14 @@ public class MoveAction implements MoveActionIf {
   }
 
    /**
-   * Protege name: Direction
+   * Protege name: MagicWord
    */
-   private String direction;
-   public void setDirection(String value) { 
-    this.direction=value;
+   private String magicWord;
+   public void setMagicWord(String value) { 
+    this.magicWord=value;
    }
-   public String getDirection() {
-     return this.direction;
+   public String getMagicWord() {
+     return this.magicWord;
    }
 
 }

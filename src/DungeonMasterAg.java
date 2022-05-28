@@ -6,7 +6,7 @@ import jade.wrapper.*;
 
 import java.util.ArrayList;
 
-public class DungeonMaster extends Agent{
+public class DungeonMasterAg extends Agent{
     //--Variables--
     boolean isStarted = false;
     Map map;
@@ -20,6 +20,7 @@ public class DungeonMaster extends Agent{
     @Override
     public void setup(){
         addPlayer();
+        addBehaviour(new AssignService(this, Config.DM));
         addBehaviour(new LaunchGame());
     }
 
