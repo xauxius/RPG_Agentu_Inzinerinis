@@ -84,8 +84,9 @@ public class DungeonMasterAg extends Agent {
                         GameAction ga = (GameAction) c;
                         manageJoin(mess.getSender(), ga);
                     }
-                } catch (Exception ex) {
-                    say("Something bad with gotten message");
+                }
+                catch (Exception ex){
+                    say("Something bad with gotten message: "+ex.getMessage());
                 }
             }
         }
@@ -161,7 +162,7 @@ public class DungeonMasterAg extends Agent {
                 }
             }
 
-            map = new Map(player, bots, dm);
+            map = new Map(player, bots);
         }
     }
     //----
