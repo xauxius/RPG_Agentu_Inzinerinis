@@ -1,18 +1,40 @@
+import RPG.ontology.DungeonMaster;
+import RPG.ontology.DungeonMastersListResponse;
+import RPG.ontology.FindDungeonMasters;
+import RPG.ontology.RPGOntology;
+import jade.content.ContentElement;
+import jade.content.ContentManager;
+import jade.content.lang.Codec;
+import jade.content.lang.sl.SLCodec;
+import jade.content.onto.Ontology;
+import jade.core.AID;
+import jade.core.behaviours.CyclicBehaviour;
+import jade.core.behaviours.OneShotBehaviour;
+import jade.domain.DFService;
+import jade.domain.FIPAAgentManagement.DFAgentDescription;
+import jade.domain.FIPAAgentManagement.ServiceDescription;
+import jade.domain.FIPAException;
 import jade.gui.GuiAgent;
 import jade.gui.GuiEvent;
-
+import jade.lang.acl.ACLMessage;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class PlayGUI extends GuiAgent {
+    //--Variables--
     GameGUI myGui = null;
-
+    ArrayList<DungeonMaster> availableDMs = new ArrayList<>();
+    AID DMsProvider;
     @Override
     public void setup()
     {
+        addBehaviour(new AssignService(this, Config.Player));
+        addBehaviour(new SearchForProvider());
         System.out.println("A[" + getLocalName() + "] Welcome to agent with GUI");
         myGui = new GameGUI();
         myGui.setVisible(true);
     }
+    //----
 
     @Override
     protected void onGuiEvent(GuiEvent guiEvent) {
@@ -69,6 +91,35 @@ public class PlayGUI extends GuiAgent {
             }
             catch (FIPAException ex){
                 ex.printStackTrace();
+            }
+        }
+    }
+    class ProcessDMList extends CyclicBehaviour{
+        PlayGUI agent;
+        public ProcessDMList(PlayGUI agent){
+            this.agent = agent;
+        }
+
+        @Override
+        public void action() {
+            ACLMessage msg = myAgent.receive();
+
+            if (msg != null){
+                ContentManager cm = agent.getCM();
+                try{
+                    ContentElement c = cm.extractContent(msg);
+                    if (c instanceof DungeonMastersListResponse){
+                        DungeonMastersListResponse dmsList = (DungeonMastersListResponse) c;
+                        Iterator dmIter = (Iterator) dmsList.getDMsList();
+                        while (dmIter.hasNext()){
+                            availableDMs.add((DungeonMaster) dmIter.next());
+                        }
+                    }
+                }
+                catch (Exception ex){
+                    System.out.println("Sad thing at dm list");
+                }
+
             }
         }
     }
