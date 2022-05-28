@@ -1,34 +1,17 @@
-import RPG.ontology.FindDungeonMasters;
-import RPG.ontology.RPGOntology;
-import jade.content.ContentManager;
-import jade.content.lang.Codec;
-import jade.content.lang.sl.SLCodec;
-import jade.content.onto.Ontology;
-import jade.core.AID;
-import jade.core.Agent;
-import jade.core.behaviours.OneShotBehaviour;
-import jade.domain.DFService;
-import jade.domain.FIPAAgentManagement.DFAgentDescription;
-import jade.domain.FIPAAgentManagement.ServiceDescription;
-import jade.domain.FIPAException;
 import jade.gui.GuiAgent;
 import jade.gui.GuiEvent;
-import jade.lang.acl.ACLMessage;
-import jade.wrapper.*;
 
 import java.util.ArrayList;
 
 public class PlayGUI extends GuiAgent {
-    //--variables--
-    ArrayList<AID> availableDMs = new ArrayList<>();
-    AID DMsProvider;
-    //----
+    GameGUI myGui = null;
 
     @Override
-    public void setup(){
-        addBehaviour(new AssignService(this, Config.Player));
-        addBehaviour(new SearchForProvider());
-        say("Hello, i am the player :)");
+    public void setup()
+    {
+        System.out.println("A[" + getLocalName() + "] Welcome to agent with GUI");
+        myGui = new GameGUI();
+        myGui.setVisible(true);
     }
 
     @Override
