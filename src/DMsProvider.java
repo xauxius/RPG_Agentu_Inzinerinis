@@ -108,7 +108,6 @@ public class DMsProvider extends Agent {
                 try{
                     String cont = received.getContent();
                     ContentElement c = cm.extractContent(received);
-                    System.out.println("A["+getLocalName()+"] Message received " +received);
 
                     if (c instanceof FindDungeonMasters){
                         FindDungeonMasters fDM = (FindDungeonMasters) c;
