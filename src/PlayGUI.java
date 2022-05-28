@@ -57,6 +57,7 @@ public class PlayGUI extends GuiAgent {
             addBehaviour(new InitiateDMSearch(this, ge.getParameter(0).toString()));
 
         }
+        
         else if (cmd == PlayGUI.DM){
             // Kas 5vyksta pasirinkus Dungeon Masteri
         }
