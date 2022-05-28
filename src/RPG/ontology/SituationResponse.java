@@ -4,21 +4,21 @@ package RPG.ontology;
 import RPG.ontology.*;
 
 /**
-* Protege name: RegisterDMResponse
+* Protege name: SituationResponse
 * @author ontology bean generator
 * @version 2022/05/29, 01:52:37
 */
-public class RegisterDMResponse implements RegisterDMResponseIf {
+public class SituationResponse implements SituationResponseIf {
 
   private static final long serialVersionUID = -726952151374612226L;
 
   private String _internalInstanceName = null;
 
-  public RegisterDMResponse() {
+  public SituationResponse() {
     this._internalInstanceName = "";
   }
 
-  public RegisterDMResponse(String instance_name) {
+  public SituationResponse(String instance_name) {
     this._internalInstanceName = instance_name;
   }
 
@@ -27,14 +27,14 @@ public class RegisterDMResponse implements RegisterDMResponseIf {
   }
 
    /**
-   * Protege name: DM
+   * Protege name: FinalAction
    */
-   private DungeonMaster dM;
-   public void setDM(DungeonMaster value) { 
-    this.dM=value;
+   private Object finalAction;
+   public void setFinalAction(Object value) { 
+    this.finalAction=value;
    }
-   public DungeonMaster getDM() {
-     return this.dM;
+   public Object getFinalAction() {
+     return this.finalAction;
    }
 
 }

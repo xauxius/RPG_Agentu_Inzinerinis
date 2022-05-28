@@ -6,11 +6,11 @@ import RPG.ontology.*;
 /**
 * Protege name: CombatAction
 * @author ontology bean generator
-* @version 2022/05/28, 19:07:58
+* @version 2022/05/29, 01:52:37
 */
 public class CombatAction implements CombatActionIf {
 
-  private static final long serialVersionUID = 4465120161782918442L;
+  private static final long serialVersionUID = -726952151374612226L;
 
   private String _internalInstanceName = null;
 
@@ -27,25 +27,14 @@ public class CombatAction implements CombatActionIf {
   }
 
    /**
-   * Protege name: ActionType
+   * Protege name: AttackEnem
    */
-   private String actionType;
-   public void setActionType(String value) { 
-    this.actionType=value;
+   private AttackEnemy attackEnem;
+   public void setAttackEnem(AttackEnemy value) { 
+    this.attackEnem=value;
    }
-   public String getActionType() {
-     return this.actionType;
-   }
-
-   /**
-   * Protege name: AttackAction
-   */
-   private Attack attackAction;
-   public void setAttackAction(Attack value) { 
-    this.attackAction=value;
-   }
-   public Attack getAttackAction() {
-     return this.attackAction;
+   public AttackEnemy getAttackEnem() {
+     return this.attackEnem;
    }
 
 }

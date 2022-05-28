@@ -7,11 +7,11 @@ import RPG.ontology.*;
 /**
 * Protege name: DungeonMastersListResponse
 * @author ontology bean generator
-* @version 2022/05/28, 19:07:58
+* @version 2022/05/29, 01:52:37
 */
 public class DungeonMastersListResponse implements DungeonMastersListResponseIf {
 
-  private static final long serialVersionUID = 4465120161782918442L;
+  private static final long serialVersionUID = -726952151374612226L;
 
   private String _internalInstanceName = null;
 

@@ -79,7 +79,7 @@ public class PlayGUI extends GuiAgent {
         @Override
         public void action() {
             ContentManager cm = agent.getCM();
-            ACLMessage msg = agent.formMSG(agent.DMsProvider);
+            ACLMessage msg = agent.formMSG(agent.DMsProvider, ACLMessage.INFORM);
             FindDungeonMasters fDM = new FindDungeonMasters();
             fDM.setDifficulty(difficulty);
             try{
@@ -161,7 +161,7 @@ public class PlayGUI extends GuiAgent {
                     }
                 }
                 catch (Exception ex){
-                    System.out.println("Sad thing at dm list");
+                    System.out.println("Sad thing at dm list: "+ex.getMessage());
                 }
             }
         }
@@ -178,7 +178,7 @@ public class PlayGUI extends GuiAgent {
         cm.registerOntology(onto);
         return cm;
     }
-    public ACLMessage formMSG(AID sendTO){
+    public ACLMessage formMSG(AID sendTO, int aclType){
         Ontology onto = RPGOntology.getInstance();
         Codec codec = new SLCodec();
         ACLMessage omsg = new ACLMessage(ACLMessage.INFORM);
