@@ -5,7 +5,7 @@ package RPG.ontology;
 /**
 * Protege name: DungeonMaster
 * @author ontology bean generator
-* @version 2022/05/28, 20:55:15
+* @version 2022/05/28, 19:07:58
 */
 public interface DungeonMasterIf extends jade.content.Concept {
 
