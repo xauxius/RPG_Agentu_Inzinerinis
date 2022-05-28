@@ -220,14 +220,14 @@ public class GameGUI extends javax.swing.JFrame {
         if(PlayGUI.STATUS == PlayGUI.DIFFICULTY){
             GuiEvent ge = new GuiEvent(this, PlayGUI.DIFFICULTY);
             ge.addParameter(ActionsList.getSelectedValue());
-            PlayGUI.STATUS = 2;
             myAgent.postGuiEvent(ge);
+            PlayGUI.STATUS = 2;
         }
         else if(PlayGUI.STATUS == PlayGUI.DM){
             GuiEvent ge = new GuiEvent(this, PlayGUI.DM);
             ge.addParameter(ActionsList.getSelectedValue());
-            PlayGUI.STATUS = 3;
             myAgent.postGuiEvent(ge);
+            PlayGUI.STATUS = 3;
         }
         else if(PlayGUI.STATUS == PlayGUI.GAMING){
             GuiEvent ge = new GuiEvent(this, PlayGUI.GAMING);

@@ -1,12 +1,10 @@
-import RPG.ontology.DungeonMaster;
-import RPG.ontology.DungeonMastersListResponse;
-import RPG.ontology.FindDungeonMasters;
-import RPG.ontology.RPGOntology;
+import RPG.ontology.*;
 import jade.content.ContentElement;
 import jade.content.ContentManager;
 import jade.content.lang.Codec;
 import jade.content.lang.sl.SLCodec;
 import jade.content.onto.Ontology;
+import jade.content.onto.OntologyException;
 import jade.core.AID;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.core.behaviours.OneShotBehaviour;
@@ -59,6 +57,28 @@ public class PlayGUI extends GuiAgent {
         else if (cmd == PlayGUI.DM){
             // Kas 5vyksta pasirinkus Dungeon Masteri
             //Siunciam dungeon master zinute, kad priimtu zaisti
+            String name = ge.getParameter(0).toString();
+            AID DmAID = new AID(name, AID.ISLOCALNAME);
+            Ontology onto = RPGOntology.getInstance();
+            Codec codec = new SLCodec();
+            ContentManager cm = getContentManager();
+            cm.registerLanguage(codec);
+            cm.registerOntology(onto);
+            ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
+            request.setLanguage(codec.getName());
+            request.setOntology(onto.getName());
+            request.clearAllReceiver();
+            request.addReceiver(DmAID);
+            GameAction msg = new GameAction();
+            msg.setWantToJoin(true);
+            try {
+                cm.fillContent(request, msg);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            send(request);
+            System.out.println("A["+getLocalName()+"] Messege to be sent: " +request);
+            say("Sent message for dm");
         }
         else if (cmd == PlayGUI.GAMING){
             // Kas 5vyksta pasirinkus ejima zaidime
