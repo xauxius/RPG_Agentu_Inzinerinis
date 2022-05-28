@@ -4,21 +4,21 @@ package RPG.ontology;
 import RPG.ontology.*;
 
 /**
-* Protege name: MoveAction
+* Protege name: MapUpdater
 * @author ontology bean generator
 * @version 2022/05/28, 20:55:15
 */
-public class MoveAction implements MoveActionIf {
+public class MapUpdater implements MapUpdaterIf {
 
   private static final long serialVersionUID = 1851734369498031622L;
 
   private String _internalInstanceName = null;
 
-  public MoveAction() {
+  public MapUpdater() {
     this._internalInstanceName = "";
   }
 
-  public MoveAction(String instance_name) {
+  public MapUpdater(String instance_name) {
     this._internalInstanceName = instance_name;
   }
 
@@ -27,14 +27,14 @@ public class MoveAction implements MoveActionIf {
   }
 
    /**
-   * Protege name: Direction
+   * Protege name: Content
    */
-   private String direction;
-   public void setDirection(String value) { 
-    this.direction=value;
+   private String content;
+   public void setContent(String value) { 
+    this.content=value;
    }
-   public String getDirection() {
-     return this.direction;
+   public String getContent() {
+     return this.content;
    }
 
 }
