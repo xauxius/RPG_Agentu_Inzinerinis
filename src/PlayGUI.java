@@ -6,6 +6,8 @@ import jade.wrapper.*;
 public class PlayGUI extends GuiAgent {
     @Override
     public void setup(){
+        addBehaviour(new AssignService(this, "Player"));
+        say("Hello, i am the player :)");
     }
 
 
@@ -20,4 +22,10 @@ public class PlayGUI extends GuiAgent {
     protected void onGuiEvent(GuiEvent guiEvent) {
 
     }
+
+
+    void say(String text){
+        System.out.println("A["+getLocalName()+"]: "+text);
+    }
+
 }
