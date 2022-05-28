@@ -5,15 +5,27 @@ package RPG.ontology;
 /**
 * Protege name: Attack
 * @author ontology bean generator
-* @version 2022/05/28, 14:21:01
+* @version 2022/05/28, 19:07:58
 */
 public interface AttackIf extends jade.content.Concept {
+
+   /**
+   * Protege name: AttackDescription
+   */
+   public void setAttackDescription(String value);
+   public String getAttackDescription();
 
    /**
    * Protege name: Accuracy
    */
    public void setAccuracy(String value);
    public String getAccuracy();
+
+   /**
+   * Protege name: AttackName
+   */
+   public void setAttackName(String value);
+   public String getAttackName();
 
    /**
    * Protege name: Damage

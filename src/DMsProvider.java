@@ -23,6 +23,9 @@ public class DMsProvider extends Agent {
     @Override
     public void setup(){
         addBehaviour(new AssignService(this, Config.DMProvider));
+        addBehaviour(new SubscribeForDM());
+        addBehaviour(new DMRegistrationNotification(this));
+        addBehaviour(new WaitForReqResp());
     }
 
     class SubscribeForDM extends OneShotBehaviour{
