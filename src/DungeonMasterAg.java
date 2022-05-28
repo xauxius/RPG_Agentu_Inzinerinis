@@ -28,8 +28,10 @@ public class DungeonMasterAg extends Agent{
 
     @Override
     public void setup(){
+        processArgs();
         addBehaviour(new AssignService(this, Config.DM));
         addBehaviour(new LaunchGame());
+
     }
 
     void processArgs(){
@@ -138,7 +140,7 @@ public class DungeonMasterAg extends Agent{
                 }
             }
 
-            //System.out.println(activePlayers.get(0).);
+            System.out.println(activePlayers.get(0));
             map = new Map(activePlayers, bots);
             System.out.println(map);
             map.moveEntityByAID(activePlayers.get(0), Map.Dirs.Up);

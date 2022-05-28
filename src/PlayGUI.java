@@ -82,12 +82,9 @@ public class PlayGUI extends GuiAgent {
             ACLMessage msg = agent.formMSG(agent.DMsProvider);
             FindDungeonMasters fDM = new FindDungeonMasters();
             fDM.setDifficulty(difficulty);
-            System.out.println("A["+getLocalName()+"] Search initiated, difficulty get: "+ difficulty);
             try{
                 cm.fillContent(msg, fDM);
                 send(msg);
-                
-                System.out.println("A["+getLocalName()+"] Message sent: " +msg);
             }
             catch (Exception ex)
             {
@@ -138,9 +135,10 @@ public class PlayGUI extends GuiAgent {
 
             if (msg != null){
                 ContentManager cm = agent.getCM();
-                System.out.println("A["+getLocalName()+"] Message received " +msg);
                 try{
                     ContentElement c = cm.extractContent(msg);
+
+                    System.out.println("A["+getLocalName()+"] Message received " +c);
                     if (c instanceof DungeonMastersListResponse){
                         DungeonMastersListResponse dmsList = (DungeonMastersListResponse) c;
                         Iterator dmIter = (Iterator) dmsList.getDMsList();
@@ -165,7 +163,6 @@ public class PlayGUI extends GuiAgent {
                 catch (Exception ex){
                     System.out.println("Sad thing at dm list");
                 }
-
             }
         }
     }
