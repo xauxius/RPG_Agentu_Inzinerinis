@@ -65,8 +65,7 @@ public class DMsProvider extends Agent {
                         while (iter.hasNext()){
                             ServiceDescription serv = (ServiceDescription) iter.next();
                             if (serv.getType().equalsIgnoreCase(Config.DM)){
-                                AID dmsID = new AID(serv.getName(), AID.ISLOCALNAME);
-                                sendDMRegisterRequest(dmsID);
+                                sendDMRegisterRequest(dfds[i].getName());
                             }
                         }
                     }
@@ -96,16 +95,12 @@ public class DMsProvider extends Agent {
     class WaitForReqResp extends CyclicBehaviour {
         @Override
         public void action() {
-            Ontology onto = RPGOntology.getInstance();
-            Codec codec = new SLCodec();
-            ContentManager cm = getContentManager();
-            cm.registerLanguage(codec);
-            cm.registerOntology(onto);
-
-            ACLMessage received = myAgent.receive();
+            MessageTemplate template = MessageTemplate.not(MessageTemplate.MatchSender(getDefaultDF()));
+            ACLMessage received = myAgent.receive(template);
 
             if (received != null){
                 try{
+                    ContentManager cm = getCM();
                     ContentElement c = cm.extractContent(received);
 
                     if (c instanceof FindDungeonMasters){
@@ -152,11 +147,15 @@ public class DMsProvider extends Agent {
     public ACLMessage formMSG(AID sendTO){
         Ontology onto = RPGOntology.getInstance();
         Codec codec = new SLCodec();
-        ACLMessage omsg = new ACLMessage(ACLMessage.INFORM);
+        ACLMessage omsg = new ACLMessage(ACLMessage.REQUEST);
         omsg.setLanguage(codec.getName());
         omsg.setOntology(onto.getName());
         omsg.clearAllReceiver();
         omsg.addReceiver(sendTO);
         return omsg;
+    }
+
+    void say(String text){
+        System.out.println("A["+getLocalName()+"]: "+text);
     }
 }

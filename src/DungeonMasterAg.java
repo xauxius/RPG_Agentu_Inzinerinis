@@ -33,12 +33,12 @@ public class DungeonMasterAg extends Agent{
         processArgs();
         addBehaviour(new AssignService(this, Config.DM));
         addBehaviour(new MainLoop(this));
-
+        say(difficulty);
     }
 
     void processArgs(){
         Object[] args = getArguments();
-        if ((args!=null) && (args.length>2))
+        if ((args!=null) && (args.length>=2))
         {
             difficulty = args[0].toString();
             description = args[1].toString();
@@ -75,6 +75,7 @@ public class DungeonMasterAg extends Agent{
 
             if (mess != null){
                 try{
+                    System.out.println(mess.getContent());
                     ContentElement c = cm.extractContent(mess);
                     if (c instanceof RequestToRegisterDM){
                         manageRegister(mess.getSender());
