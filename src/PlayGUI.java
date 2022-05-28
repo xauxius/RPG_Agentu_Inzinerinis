@@ -1,11 +1,15 @@
-import jade.core.Agent;
 import jade.gui.GuiAgent;
 import jade.gui.GuiEvent;
-import jade.wrapper.*;
 
 public class PlayGUI extends GuiAgent {
+    GameGUI myGui = null;
+
     @Override
-    public void setup(){
+    public void setup()
+    {
+        System.out.println("A[" + getLocalName() + "] Welcome to agent with GUI");
+        myGui = new GameGUI();
+        myGui.setVisible(true);
     }
 
 
