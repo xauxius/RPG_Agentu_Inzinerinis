@@ -32,6 +32,7 @@ public class DungeonMasterAg extends Agent{
     public void setup(){
         processArgs();
         addBehaviour(new AssignService(this, Config.DM));
+        addBehaviour(new MainLoop(this));
 
     }
 

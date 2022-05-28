@@ -55,11 +55,10 @@ public class PlayGUI extends GuiAgent {
             availableDMs = new ArrayList<>();
             System.out.println("A["+getLocalName()+"] Difficulty: " +ge.getParameter(0).toString());
             addBehaviour(new InitiateDMSearch(this, ge.getParameter(0).toString()));
-
         }
-        
         else if (cmd == PlayGUI.DM){
             // Kas 5vyksta pasirinkus Dungeon Masteri
+            //Siunciam dungeon master zinute, kad priimtu zaisti
         }
         else if (cmd == PlayGUI.GAMING){
             // Kas 5vyksta pasirinkus ejima zaidime
@@ -163,6 +162,7 @@ public class PlayGUI extends GuiAgent {
                 }
                 catch (Exception ex){
                     System.out.println("Sad thing at dm list");
+                    myGui.ChangeSelection(new String[] {"Dungeon masters pasirinkto lygio nera, Pasirinkite kita..."});
                 }
             }
         }
