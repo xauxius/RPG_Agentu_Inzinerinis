@@ -1,3 +1,9 @@
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.*;
+import java.io.File;
+import java.io.IOException;
+
 /**
  *
  * @author krmig
@@ -9,6 +15,10 @@ public class GameGUI extends javax.swing.JFrame {
      */
     public GameGUI() {
         initComponents();
+        System.out.println("frame width : "+getWidth());
+        System.out.println("frame height: "+getHeight());
+        System.out.println("content pane width : "+getContentPane().getWidth());
+        System.out.println("content pane height: "+getContentPane().getHeight());
     }
 
     /**
@@ -19,7 +29,13 @@ public class GameGUI extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">
     private void initComponents() {
-        jButton1 = new javax.swing.JButton();
+
+        try {
+            this.setContentPane(new JLabel(new ImageIcon(ImageIO.read(new File("src/photo/background_image.png")))));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        this.getContentPane().setBackground(Color.cyan);
         jScrollPane2 = new javax.swing.JScrollPane();
         MapTextArea = new javax.swing.JTextArea();
         jScrollPane4 = new javax.swing.JScrollPane();
@@ -35,7 +51,30 @@ public class GameGUI extends javax.swing.JFrame {
         DungeonMasterTextArea = new javax.swing.JTextArea();
         DungeonMasterTextArea.setEditable(false);
         MapTextArea.setEditable(false);
-        jButton1.setText("jButton1");
+        LivesCountLabel.setOpaque(true);
+        LivesCountLabel.setBackground(Color.decode("#cda8eb"));
+        jLabel1.setOpaque(true);
+        jLabel1.setBackground(Color.decode("#cda8eb"));
+        jLabel2.setOpaque(true);
+        jLabel2.setBackground(Color.decode("#cda8eb"));
+        jLabel3.setOpaque(true);
+        jLabel3.setBackground(Color.decode("#cda8eb"));
+        LivesNumber.setOpaque(true);
+        LivesNumber.setBackground(Color.decode("#cda8eb"));
+        DungeonMasterTextArea.setBackground(Color.decode("#e6d4f5"));
+        MapTextArea.setBackground(Color.decode("#e6d4f5"));
+        ActionsList.setBackground(Color.decode("#e6d4f5"));
+        ActionsList.setSelectionBackground(new java.awt.Color(213, 30, 226));
+
+        ActionButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                ActionButton.setBackground(Color.decode("#cda8eb"));
+            }
+
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                ActionButton.setBackground(Color.decode("#e6d4f5"));
+            }
+        });
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -58,18 +97,30 @@ public class GameGUI extends javax.swing.JFrame {
             }
         });
 
+        jLabel1.setFont(new java.awt.Font("Century Gothic", 1, 12)); // NOI18N
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Dungeon Master ");
 
+        jLabel2.setFont(new java.awt.Font("Century Gothic", 1, 12)); // NOI18N
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("Game map");
 
+        jLabel3.setFont(new java.awt.Font("Century Gothic", 1, 12)); // NOI18N
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel3.setText("Choose your action:");
 
+        LivesCountLabel.setFont(new java.awt.Font("Century Gothic", 1, 12)); // NOI18N
+        LivesCountLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         LivesCountLabel.setText("Lives left:");
 
-        jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Century Gothic", 1, 24)); // NOI18N
         jLabel5.setText("RPG game");
 
+        LivesNumber.setFont(new java.awt.Font("Century Gothic", 1, 12)); // NOI18N
+        LivesNumber.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         LivesNumber.setText("0");
+        LivesNumber.setMaximumSize(new java.awt.Dimension(10, 16));
+        LivesNumber.setMinimumSize(new java.awt.Dimension(10, 16));
 
         DungeonMasterTextArea.setColumns(20);
         DungeonMasterTextArea.setRows(5);
@@ -82,54 +133,52 @@ public class GameGUI extends javax.swing.JFrame {
                         .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addGroup(layout.createSequentialGroup()
-                                                .addGap(215, 215, 215)
-                                                .addComponent(jLabel5))
-                                        .addGroup(layout.createSequentialGroup()
                                                 .addGap(73, 73, 73)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                         .addGroup(layout.createSequentialGroup()
                                                                 .addGap(50, 50, 50)
                                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                                                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                                                .addComponent(ActionButton)
-                                                                .addGroup(layout.createSequentialGroup()
-                                                                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                        .addGap(16, 16, 16)))
-                                                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addGroup(layout.createSequentialGroup()
-                                                                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                                .addComponent(LivesCountLabel)
-                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                .addComponent(LivesNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                .addGap(4, 4, 4))
-                                                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                                .addContainerGap(71, Short.MAX_VALUE))
+                                                                .addComponent(ActionButton, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                                                        .addGroup(layout.createSequentialGroup()
+                                                                                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                                                .addComponent(LivesCountLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                                .addGap(6, 6, 6)
+                                                                                .addComponent(LivesNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addGroup(layout.createSequentialGroup()
+                                                .addGap(214, 214, 214)
+                                                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addContainerGap(87, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
                                 .addContainerGap()
                                 .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
-                                .addComponent(jLabel1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel2)
-                                .addGap(1, 1, 1)
+                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(26, 26, 26)
+                                .addGap(10, 10, 10)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(jLabel3)
-                                        .addComponent(LivesCountLabel)
-                                        .addComponent(LivesNumber))
+                                        .addComponent(LivesCountLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(LivesNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(ActionButton)
+                                .addComponent(ActionButton, javax.swing.GroupLayout.DEFAULT_SIZE, 33, Short.MAX_VALUE)
                                 .addContainerGap())
         );
 
@@ -183,7 +232,6 @@ public class GameGUI extends javax.swing.JFrame {
     private javax.swing.JLabel LivesCountLabel;
     private javax.swing.JLabel LivesNumber;
     private javax.swing.JTextArea MapTextArea;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
