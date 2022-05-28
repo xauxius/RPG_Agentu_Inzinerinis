@@ -14,7 +14,7 @@ import jade.wrapper.*;
 
 import java.util.ArrayList;
 
-public class DungeonMasterAg extends Agent{
+public class DungeonMasterAg extends Agent {
     //--Variables--
     boolean isStarted = false;
     Map map;
@@ -29,17 +29,16 @@ public class DungeonMasterAg extends Agent{
 
 
     @Override
-    public void setup(){
+    public void setup() {
         processArgs();
         addBehaviour(new AssignService(this, Config.DM));
         addBehaviour(new MainLoop(this));
         say(difficulty);
     }
 
-    void processArgs(){
+    void processArgs() {
         Object[] args = getArguments();
-        if ((args!=null) && (args.length>=2))
-        {
+        if ((args != null) && (args.length >= 2)) {
             difficulty = args[0].toString();
             description = args[1].toString();
         }
@@ -47,11 +46,12 @@ public class DungeonMasterAg extends Agent{
 
     //--Behaviour Classes--
     //Does all the neccesarry thing when game is waiting to be started
-    class MainLoop extends CyclicBehaviour{ //Needs implementing: waiting for player, initiating the game
+    class MainLoop extends CyclicBehaviour { //Needs implementing: waiting for player, initiating the game
         DungeonMasterAg agent;
         ContentManager cm;
         boolean isStarted;
-        public MainLoop(DungeonMasterAg agent){
+
+        public MainLoop(DungeonMasterAg agent) {
             this.agent = agent;
             cm = agent.getCM();
         }
@@ -59,48 +59,48 @@ public class DungeonMasterAg extends Agent{
         @Override
         public void action() {
             processRequestMessages();
-            if (isStarted){ // If the game is started then two possibilities
-                if (waitingForResp){ //The dm is waiting for the action of character whose turn it is
+            if (isStarted) { // If the game is started then two possibilities
+                if (waitingForResp) { //The dm is waiting for the action of character whose turn it is
                     processActionResponse(); //Process the action that character presents
                 }
-                else{
+                else {
                     sendActionRequest(); //If it is not waiting for response then it is time to request someone to take actions
                 }
             }
         }
 
-        void processRequestMessages(){
+        void processRequestMessages() {
             MessageTemplate template = MessageTemplate.MatchPerformative(ACLMessage.REQUEST);
             ACLMessage mess = agent.receive(template);
 
-            if (mess != null){
-                try{
+            if (mess != null) {
+                try {
                     System.out.println(mess.getContent());
                     ContentElement c = cm.extractContent(mess);
-                    if (c instanceof RequestToRegisterDM){
+                    if (c instanceof RequestToRegisterDM) {
                         manageRegister(mess.getSender());
                     }
-                    if (c instanceof GameAction){
+                    if (c instanceof GameAction) {
                         GameAction ga = (GameAction) c;
                         manageJoin(mess.getSender(), ga);
                     }
-                }
-                catch (Exception ex){
+                } catch (Exception ex) {
                     say("Something bad with gotten message");
                 }
             }
         }
 
-        
-        void processActionResponse(){ //Here we should process the action message from character
 
-        }
-        void sendActionRequest(){ //Here we should ask character whose turn it is to make an action, also we should somehow define on what actions can he make in that situation
+        void processActionResponse() { //Here we should process the action message from character
 
         }
 
-        void manageRegister(AID sender){
-            try{
+        void sendActionRequest() { //Here we should ask character whose turn it is to make an action, also we should somehow define on what actions can he make in that situation
+
+        }
+
+        void manageRegister(AID sender) {
+            try {
                 RegisterDMResponse resp = new RegisterDMResponse();
                 DungeonMaster dm = new DungeonMaster();
                 dm.setDescription(agent.description);
@@ -110,31 +110,29 @@ public class DungeonMasterAg extends Agent{
                 ACLMessage messResp = agent.formMSG(sender);
                 cm.fillContent(messResp, resp);
                 agent.send(messResp);
-            }
-            catch (Exception ex){
+            } catch (Exception ex) {
                 say("could not register");
             }
 
 
         }
 
-        void manageJoin(AID sender, GameAction ga){
-            if (ga.getWantToJoin() == true){
+        void manageJoin(AID sender, GameAction ga) {
+            if (ga.getWantToJoin() == true) {
                 GameActionResponse resp = new GameActionResponse();
-                if (!isStarted){
+                if (!isStarted) {
                     resp.setSuccess(true);
                     player = sender;
                     agent.addBehaviour(new LaunchGame(agent));
                 }
-                else{
+                else {
                     resp.setSuccess(false);
                 }
                 ACLMessage respMess = agent.formMSG(sender);
-                try{
+                try {
                     cm.fillContent(respMess, resp);
                     send(respMess);
-                }
-                catch (Exception ex){
+                } catch (Exception ex) {
                     say("could not send join response");
                 }
 
@@ -143,21 +141,22 @@ public class DungeonMasterAg extends Agent{
     }
 
     //Launches bot agents, prepares map if necesary
-    class LaunchGame extends OneShotBehaviour{
+    class LaunchGame extends OneShotBehaviour {
         DungeonMasterAg dm;
-        public LaunchGame(DungeonMasterAg dm){
+
+        public LaunchGame(DungeonMasterAg dm) {
             this.dm = dm;
         }
+
         @Override
-        public void action(){
+        public void action() {
             AgentContainer cont = myAgent.getContainerController();
-            for (int i = 0; i < 5; i++){
-                try{
-                    AgentController bot = cont.createNewAgent("Goblin"+bots.size(), "NPC", new Object[0]);
+            for (int i = 0; i < 5; i++) {
+                try {
+                    AgentController bot = cont.createNewAgent("Goblin" + bots.size(), "NPC", new Object[0]);
                     bot.start();
                     bots.add(new AID(bot.getName(), AID.ISLOCALNAME));
-                }
-                catch (Exception e){
+                } catch (Exception e) {
                     say("Something ain't right");
                 }
             }
@@ -169,7 +168,7 @@ public class DungeonMasterAg extends Agent{
 
     //--Simple Methods--
 
-    public ContentManager getCM(){
+    public ContentManager getCM() {
         Ontology onto = RPGOntology.getInstance();
         Codec codec = new SLCodec();
         ContentManager cm = getContentManager();
@@ -177,7 +176,8 @@ public class DungeonMasterAg extends Agent{
         cm.registerOntology(onto);
         return cm;
     }
-    public ACLMessage formMSG(AID sendTO){
+
+    public ACLMessage formMSG(AID sendTO) {
         Ontology onto = RPGOntology.getInstance();
         Codec codec = new SLCodec();
         ACLMessage omsg = new ACLMessage(ACLMessage.INFORM);
@@ -188,11 +188,12 @@ public class DungeonMasterAg extends Agent{
         return omsg;
     }
 
-    void say(String text){
-        System.out.println("A["+getLocalName()+"]: "+text);
+    void say(String text) {
+        System.out.println("A[" + getLocalName() + "]: " + text);
     }
-    void say(String text, String beh){
-        System.out.println("A["+getLocalName()+"|"+beh+"]: "+text);
+
+    void say(String text, String beh) {
+        System.out.println("A[" + getLocalName() + "|" + beh + "]: " + text);
     }
     //----
 }

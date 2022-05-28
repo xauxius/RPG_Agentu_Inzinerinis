@@ -7,24 +7,27 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 public class AssignService extends OneShotBehaviour {
     DFAgentDescription dfd;
     String serv;
-    public AssignService(Agent a, String serv){
+
+    public AssignService(Agent a, String serv) {
         super(a);
         this.serv = serv;
     }
+
     @Override
     public void action() {
         dfd = new DFAgentDescription();
         addService();
-        try
-        {
-            DFService.register( myAgent, dfd );
+        try {
+            DFService.register(myAgent, dfd);
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
-        catch (Exception ex) { ex.printStackTrace(); }
     }
-    void addService(){
+
+    void addService() {
         ServiceDescription sd = new ServiceDescription();
         sd.setType(serv);
-        sd.setName(serv+"-"+myAgent.getLocalName());
+        sd.setName(serv + "-" + myAgent.getLocalName());
         dfd.addServices(sd);
     }
 
