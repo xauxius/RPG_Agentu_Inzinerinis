@@ -81,16 +81,16 @@ public class Map {
         int j = entity.j;
         switch(dir){
             case Up:
-                j++;
+                i--;
                 break;
             case Down:
-                j--;
-                break;
-            case Right:
                 i++;
                 break;
+            case Right:
+                j++;
+                break;
             case Left:
-                i--;
+                j--;
                 break;
         }
 
