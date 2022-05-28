@@ -5,20 +5,14 @@ package RPG.ontology;
 /**
 * Protege name: CombatAction
 * @author ontology bean generator
-* @version 2022/05/28, 19:07:58
+* @version 2022/05/29, 01:52:37
 */
-public interface CombatActionIf extends jade.content.Predicate {
+public interface CombatActionIf extends jade.content.Concept {
 
    /**
-   * Protege name: ActionType
+   * Protege name: AttackEnem
    */
-   public void setActionType(String value);
-   public String getActionType();
-
-   /**
-   * Protege name: AttackAction
-   */
-   public void setAttackAction(Attack value);
-   public Attack getAttackAction();
+   public void setAttackEnem(AttackEnemy value);
+   public AttackEnemy getAttackEnem();
 
 }

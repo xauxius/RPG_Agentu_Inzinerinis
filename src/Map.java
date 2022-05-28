@@ -1,3 +1,4 @@
+import RPG.ontology.AvailableOptions;
 import jade.core.AID;
 
 import java.util.ArrayList;
@@ -12,7 +13,6 @@ public class Map {
     static String Wall = "x";
     static String Ground = ".";
     static String Enemy = "E";
-    DungeonMasterAg dm;
 
     ArrayList<Entity> entities = new ArrayList<Entity>();
 
@@ -29,18 +29,17 @@ public class Map {
             {Wall, Wall, Wall, Wall, Wall, Wall, Wall}
     };
 
-    public Map(AID player, ArrayList<AID> bots, DungeonMasterAg dm){
-        this.dm = dm;
+    public Map(AID player, ArrayList<AID> bots){
         N = mapSkelet.length;
         M = mapSkelet[0].length;
         int playI = 8;
         int playJ = 3;
-        entities.add(new Entity(player, EntType.Player, playI, playJ, "P"));
-        entities.add(new Entity(bots.get(0), EntType.Bot, 1, 1, Enemy));
-        entities.add(new Entity(bots.get(1), EntType.Bot, 1, 3, Enemy));
-        entities.add(new Entity(bots.get(2), EntType.Bot, 1, 5, Enemy));
-        entities.add(new Entity(bots.get(3), EntType.Bot, 2, 2, Enemy));
-        entities.add(new Entity(bots.get(4), EntType.Bot, 2, 4, Enemy));
+        entities.add(new Entity(player, EntType.Player, playI, playJ, "*"));
+        entities.add(new Entity(bots.get(0), EntType.Bot, 1, 1, "a"));
+        entities.add(new Entity(bots.get(1), EntType.Bot, 1, 3, "b"));
+        entities.add(new Entity(bots.get(2), EntType.Bot, 1, 5, "c"));
+        entities.add(new Entity(bots.get(3), EntType.Bot, 2, 2, "d"));
+        entities.add(new Entity(bots.get(4), EntType.Bot, 2, 4, "e"));
     }
 
 
@@ -57,17 +56,36 @@ public class Map {
     }
 
     boolean moveEntityByAID(AID id, Dirs dir){
+        Entity ent = getByAID(id);
+        if (ent != null){
+            return moveEntity(ent, dir);
+        }
+        else{
+            System.out.println("Entity you tried moving was null");
+            return false;
+        }
+    }
+
+    public AvailableOptions getOptions(AID id){
+        AvailableOptions avOpts = new AvailableOptions();
+        Entity ent = getByAID(id);
+
+
+
+        return avOpts;
+    }
+
+
+
+    Entity getByAID(AID id){
         for (Entity ent: entities){
-            if (ent.agent.equals(id)){
-                moveEntity(ent, dir);
+            if (ent.agent.equals(id)) {
+                return ent;
             }
         }
-        return false;
+        return null;
     }
 
-    void needsUpdate(){
-
-    }
 
     boolean moveEntity(Entity entity, Dirs dir){
         int i = entity.i;
