@@ -6,11 +6,11 @@ import jade.content.schema.*;
 
 /** file: RPGOntology.java
  * @author ontology bean generator
- * @version 2022/05/28, 19:07:58
+ * @version 2022/05/28, 20:55:15
  */
 public class RPGOntology extends jade.content.onto.Ontology  {
 
-  private static final long serialVersionUID = 4465120161782918442L;
+  private static final long serialVersionUID = 1851734369498031622L;
 
   //NAME
   public static final String ONTOLOGY_NAME = "RPG";
@@ -22,6 +22,8 @@ public class RPGOntology extends jade.content.onto.Ontology  {
 
 
    // VOCABULARY
+    public static final String MAPUPDATER_CONTENT="Content";
+    public static final String MAPUPDATER="MapUpdater";
     public static final String COMBATACTION_ATTACKACTION="AttackAction";
     public static final String COMBATACTION_ACTIONTYPE="ActionType";
     public static final String COMBATACTION="CombatAction";
@@ -32,8 +34,6 @@ public class RPGOntology extends jade.content.onto.Ontology  {
     public static final String SITUATION="Situation";
     public static final String REQUESTTOREGISTERDM_MAGICWORD="MagicWord";
     public static final String REQUESTTOREGISTERDM="RequestToRegisterDM";
-    public static final String MAP_CONTENT="Content";
-    public static final String MAP="Map";
     public static final String DUNGEONMASTERSLISTRESPONSE_DMSLIST="DMsList";
     public static final String DUNGEONMASTERSLISTRESPONSE="DungeonMastersListResponse";
     public static final String FINDDUNGEONMASTERS_DIFFICULTY="Difficulty";
@@ -83,8 +83,6 @@ public class RPGOntology extends jade.content.onto.Ontology  {
     add(findDungeonMastersSchema, RPG.ontology.FindDungeonMasters.class);
     PredicateSchema dungeonMastersListResponseSchema = new PredicateSchema(DUNGEONMASTERSLISTRESPONSE);
     add(dungeonMastersListResponseSchema, RPG.ontology.DungeonMastersListResponse.class);
-    PredicateSchema mapSchema = new PredicateSchema(MAP);
-    add(mapSchema, RPG.ontology.Map.class);
     PredicateSchema requestToRegisterDMSchema = new PredicateSchema(REQUESTTOREGISTERDM);
     add(requestToRegisterDMSchema, RPG.ontology.RequestToRegisterDM.class);
     PredicateSchema situationSchema = new PredicateSchema(SITUATION);
@@ -93,6 +91,8 @@ public class RPGOntology extends jade.content.onto.Ontology  {
     add(gameActionResponseSchema, RPG.ontology.GameActionResponse.class);
     PredicateSchema combatActionSchema = new PredicateSchema(COMBATACTION);
     add(combatActionSchema, RPG.ontology.CombatAction.class);
+    PredicateSchema mapUpdaterSchema = new PredicateSchema(MAPUPDATER);
+    add(mapUpdaterSchema, RPG.ontology.MapUpdater.class);
 
 
     // adding fields
@@ -109,13 +109,13 @@ public class RPGOntology extends jade.content.onto.Ontology  {
     gameActionSchema.add(GAMEACTION_WANTTOLEAVE, (TermSchema)getSchema(BasicOntology.BOOLEAN), ObjectSchema.MANDATORY);
     findDungeonMastersSchema.add(FINDDUNGEONMASTERS_DIFFICULTY, (TermSchema)getSchema(BasicOntology.STRING), ObjectSchema.OPTIONAL);
     dungeonMastersListResponseSchema.add(DUNGEONMASTERSLISTRESPONSE_DMSLIST, dungeonMasterSchema, 0, ObjectSchema.UNLIMITED);
-    mapSchema.add(MAP_CONTENT, (TermSchema)getSchema(BasicOntology.STRING), ObjectSchema.MANDATORY);
     requestToRegisterDMSchema.add(REQUESTTOREGISTERDM_MAGICWORD, (TermSchema)getSchema(BasicOntology.STRING), ObjectSchema.OPTIONAL);
     situationSchema.add(SITUATION_PROMPT, (TermSchema)getSchema(BasicOntology.STRING), ObjectSchema.OPTIONAL);
     situationSchema.add(SITUATION_ACTIONS, new ConceptSchema("Concept"), 0, ObjectSchema.UNLIMITED);
     gameActionResponseSchema.add(GAMEACTIONRESPONSE_SUCCESS, (TermSchema)getSchema(BasicOntology.BOOLEAN), ObjectSchema.OPTIONAL);
     combatActionSchema.add(COMBATACTION_ACTIONTYPE, (TermSchema)getSchema(BasicOntology.STRING), ObjectSchema.MANDATORY);
     combatActionSchema.add(COMBATACTION_ATTACKACTION, attackSchema, ObjectSchema.OPTIONAL);
+    mapUpdaterSchema.add(MAPUPDATER_CONTENT, (TermSchema)getSchema(BasicOntology.STRING), ObjectSchema.MANDATORY);
 
     // adding name mappings
 
