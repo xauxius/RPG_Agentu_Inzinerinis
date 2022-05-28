@@ -55,9 +55,16 @@ public class DungeonMasterAg extends Agent{
         }
 
         @Override
-        public void action() { // If player wants to join add to the players,
-            processMessages();
-
+        public void action() {
+            processRequestMessages();
+            if (isStarted){ // If the game is started then two possibilities
+                if (waitingForResp){ //The dm is waiting for the action of character whose turn it is
+                    processActionResponse(); //Process the action that character presents
+                }
+                else{
+                    sendActionRequest(); //If it is not waiting for response then it is time to request someone to take actions
+                }
+            }
         }
 
         void processMessages(){
@@ -80,6 +87,12 @@ public class DungeonMasterAg extends Agent{
             }
         }
 
+        void processActionResponse(){ //Here we should process the action message from character
+
+        }
+        void sendActionRequest(){ //Here we should ask character whose turn it is to make an action, also we should somehow define on what actions can he make in that situation
+
+        }
 
         void manageRegister(AID sender){
             try{
@@ -194,5 +207,3 @@ public class DungeonMasterAg extends Agent{
     }
     //----
 }
-
-

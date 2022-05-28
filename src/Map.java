@@ -76,6 +76,10 @@ public class Map {
         return false;
     }
 
+    void needsUpdate(){
+
+    }
+
     boolean moveEntity(Entity entity, Dirs dir){
         int i = entity.i;
         int j = entity.j;
