@@ -86,6 +86,7 @@ public class PlayGUI extends GuiAgent {
             try{
                 cm.fillContent(msg, fDM);
                 send(msg);
+                
                 System.out.println("A["+getLocalName()+"] Message sent: " +msg);
             }
             catch (Exception ex)
