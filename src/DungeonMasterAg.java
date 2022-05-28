@@ -9,6 +9,7 @@ import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.core.behaviours.OneShotBehaviour;
 import jade.lang.acl.ACLMessage;
+import jade.lang.acl.MessageTemplate;
 import jade.wrapper.*;
 
 import java.util.ArrayList;
@@ -23,6 +24,7 @@ public class DungeonMasterAg extends Agent{
     String description;
     String difficulty;
     ArrayList<NPC> viableBots = new ArrayList<>();
+    boolean waitingForResp;
     //----
 
 
@@ -67,8 +69,9 @@ public class DungeonMasterAg extends Agent{
             }
         }
 
-        void processMessages(){
-            ACLMessage mess = agent.receive();
+        void processRequestMessages(){
+            MessageTemplate template = MessageTemplate.MatchPerformative(ACLMessage.REQUEST);
+            ACLMessage mess = agent.receive(template);
 
             if (mess != null){
                 try{
