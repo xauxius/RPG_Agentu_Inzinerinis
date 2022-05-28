@@ -87,6 +87,7 @@ public class DungeonMasterAg extends Agent{
             }
         }
 
+        
         void processActionResponse(){ //Here we should process the action message from character
 
         }
