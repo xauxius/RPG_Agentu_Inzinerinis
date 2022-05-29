@@ -27,6 +27,7 @@ public class DungeonMasterAg extends Agent {
     int turn = 0;
     boolean waitingForResp;
     Random random = new Random();
+    static int botAll = 0;
     //----
 
 
@@ -251,7 +252,7 @@ public class DungeonMasterAg extends Agent {
             String[] markers = new String[]{"a", "b", "c", "d", "e"};
             for (int i = 0; i < 5; i++) {
                 try {
-                    AgentController bot = cont.createNewAgent("Goblin" + bots.size(), "NPC", new Object[0]);
+                    AgentController bot = cont.createNewAgent("Goblin" + botAll++, "NPC", new Object[0]);
                     bot.start();
                     AID botId = new AID(bot.getName(), AID.ISGUID);
                     bots.add(botId);
@@ -304,11 +305,9 @@ public class DungeonMasterAg extends Agent {
 
     public void Reset(){
         activeCharacters = new ArrayList<>();
-        bots = new ArrayList<>();
         isStarted = false;
         turn = 0;
         for (AID bot: bots){
-
             try
             {
                 AgentContainer mc = this.getContainerController();
@@ -317,6 +316,7 @@ public class DungeonMasterAg extends Agent {
             }
             catch (Exception ex) {}
         }
+        bots = new ArrayList<>();
     }
 
     public String getMarker(AID id){
