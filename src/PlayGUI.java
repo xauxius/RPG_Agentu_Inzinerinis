@@ -17,17 +17,13 @@ import jade.gui.GuiEvent;
 import jade.lang.acl.ACLMessage;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
-import java.util.List;
 
 public class PlayGUI extends GuiAgent {
     public static int STATUS = 0;
     public static final int DIFFICULTY = 1;
     public static final int DM = 2;
     public static final int GAMING = 3;
-    public static final int WIN = 4;
-    public static final int LOST = 5;
     //--Variables--
 
     GameGUI myGui = null;
@@ -64,11 +60,10 @@ public class PlayGUI extends GuiAgent {
         if (cmd == PlayGUI.DIFFICULTY) {
             // Kas ivyksta pasirinkus difficulty
             availableDMs = new ArrayList<>();
-            System.out.println("A[" + getLocalName() + "] Difficulty: " + ge.getParameter(0).toString());
             addBehaviour(new InitiateDMSearch(this, ge.getParameter(0).toString()));
         }
         else if (cmd == PlayGUI.DM) {
-            // Kas 5vyksta pasirinkus Dungeon Masteri
+            // Kas ivyksta pasirinkus Dungeon Masteri
             //Siunciam dungeon master zinute, kad priimtu zaisti
             String name = ge.getParameter(0).toString();
             AID DmAID = new AID(name, AID.ISLOCALNAME);
@@ -89,9 +84,9 @@ public class PlayGUI extends GuiAgent {
         else if (cmd == PlayGUI.GAMING) {
             // Kas ivyksta pasirinkus ejima zaidime
             int index = (int) ge.getParameter(0); // Pasirinktas action
-            if(index < mLen){
+            if (index < mLen) {
                 MoveAction action = new MoveAction();
-                action.setDirection((String)mvOpt.getDir().get(index));
+                action.setDirection((String) mvOpt.getDir().get(index));
                 ACLMessage response = new ACLMessage(ACLMessage.INFORM);
                 response.setLanguage(codec.getName());
                 response.setOntology(onto.getName());
@@ -106,8 +101,8 @@ public class PlayGUI extends GuiAgent {
                 }
                 send(response);
             }
-            else{
-                int attackInd = index-mLen;
+            else {
+                int attackInd = index - mLen;
                 AttackOptions action = new AttackOptions();
                 ACLMessage response = new ACLMessage(ACLMessage.INFORM);
                 response.setLanguage(codec.getName());
@@ -115,7 +110,7 @@ public class PlayGUI extends GuiAgent {
                 response.clearAllReceiver();
                 response.addReceiver(DungeonMasterAID);
                 SituationResponse msg = new SituationResponse();
-                msg.setFinalAction(((AttackEnemy)atOpt.getAttackEnemyy().get(attackInd)));
+                msg.setFinalAction(((AttackEnemy) atOpt.getAttackEnemyy().get(attackInd)));
                 try {
                     cm.fillContent(response, msg);
                 } catch (Exception e) {
@@ -127,7 +122,7 @@ public class PlayGUI extends GuiAgent {
     }
 
     //--Behaviours--
-    class InitiateDMSearch extends OneShotBehaviour { //Reiks su GUI sujungt jog diff pasirinkt (maybe)
+    class InitiateDMSearch extends OneShotBehaviour {
         PlayGUI agent;
         String difficulty = "";
 
@@ -215,7 +210,7 @@ public class PlayGUI extends GuiAgent {
                         }
 
                     }
-                    if (c instanceof SituationResponseRequest){
+                    if (c instanceof SituationResponseRequest) {
                         SituationResponseRequest response = (SituationResponseRequest) c;
                         myGui.ChangeMap(response.getMap());
                         myGui.ChangePrompt(response.getPropmpt());
@@ -234,17 +229,16 @@ public class PlayGUI extends GuiAgent {
                         boolean won = response.getGameWon();
                         boolean lost = response.getGameLost();
                         myGui.ChangeSelection(result);
-                        if(won){
+                        if (won) {
                             myGui.ChangeMap("\n\n\n\n\n    Congratulations \n        You won!");
-                            String[] strings = { "" };
+                            String[] strings = {""};
                             myGui.ChangeSelection(strings);
                         }
-                        else if(lost){
+                        else if (lost) {
                             myGui.ChangeMap("\n\n\n\n\n      Game over :(");
-                            String[] strings = { "" };
+                            String[] strings = {""};
                             myGui.ChangeSelection(strings);
                         }
-
 
 
                     }
@@ -266,7 +260,8 @@ public class PlayGUI extends GuiAgent {
         cm.registerOntology(onto);
         return cm;
     }
-    public ACLMessage formMSG(AID sendTO, int aclType){
+
+    public ACLMessage formMSG(AID sendTO, int aclType) {
         Ontology onto = RPGOntology.getInstance();
         Codec codec = new SLCodec();
         ACLMessage omsg = new ACLMessage(ACLMessage.INFORM);
@@ -281,23 +276,24 @@ public class PlayGUI extends GuiAgent {
         System.out.println("A[" + getLocalName() + "]: " + text);
     }
 
-    String[] moveOptsStr(MoveOptions opts){
+    String[] moveOptsStr(MoveOptions opts) {
         String[] mvOpts = new String[opts.getDir().size()];
         Iterator optIter = opts.getAllDir();
         int i = 0;
-        while(optIter.hasNext()){
-            mvOpts[i] = "Move "+optIter.next().toString();
+        while (optIter.hasNext()) {
+            mvOpts[i] = "Move " + optIter.next().toString();
             i++;
         }
         return mvOpts;
     }
-    String[] attOptsStr(AttackOptions opts){
+
+    String[] attOptsStr(AttackOptions opts) {
         String[] attOpts = new String[opts.getAttackEnemyy().size()];
         Iterator attIter = opts.getAllAttackEnemyy();
         int i = 0;
-        while(attIter.hasNext()){
+        while (attIter.hasNext()) {
             AttackEnemy attEn = (AttackEnemy) attIter.next();
-            attOpts[i] = "Attack "+attEn.getEnemyID()+", with attack: "+attEn.getAttackType().getAttackName()+", Damage: "+attEn.getAttackType().getDamage()+", Accuracy: "+attEn.getAttackType().getAccuracy();
+            attOpts[i] = "Attack " + attEn.getEnemyID() + ", with attack: " + attEn.getAttackType().getAttackName() + ", Damage: " + attEn.getAttackType().getDamage() + ", Accuracy: " + attEn.getAttackType().getAccuracy();
             i++;
         }
         return attOpts;

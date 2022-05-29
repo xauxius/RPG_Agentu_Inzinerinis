@@ -32,7 +32,7 @@ public class Map {
             {Wall, Wall, Wall, Wall, Wall, Wall, Wall}
     };
 
-    public Map(AID player, ArrayList<AID> bots){
+    public Map(AID player, ArrayList<AID> bots) {
         this.attacks = formAttacks();
         N = mapSkelet.length;
         M = mapSkelet[0].length;
@@ -46,7 +46,7 @@ public class Map {
         entities.add(new Entity(bots.get(4), EntType.Bot, 2, 4, "e"));
     }
 
-    ArrayList<Attack> formAttacks(){
+    ArrayList<Attack> formAttacks() {
         ArrayList<Attack> atts = new ArrayList<>();
         Attack kick = new Attack();
         kick.setAccuracy(90);
@@ -84,30 +84,30 @@ public class Map {
         return true;
     }
 
-    boolean moveEntityByAID(AID id, Dirs dir){
-        if (dir == Dirs.Stay){
+    boolean moveEntityByAID(AID id, Dirs dir) {
+        if (dir == Dirs.Stay) {
             return true;
         }
         Entity ent = getByAID(id);
-        if (ent != null){
+        if (ent != null) {
             return moveEntity(ent, dir);
         }
-        else{
+        else {
             System.out.println("Entity you tried moving was null");
             return false;
         }
     }
 
-    boolean isEnemiesCleared(){
-        for (Entity ent: entities){
-            if (ent.entType == EntType.Bot && !ent.isDead){
+    boolean isEnemiesCleared() {
+        for (Entity ent : entities) {
+            if (ent.entType == EntType.Bot && !ent.isDead) {
                 return false;
             }
         }
         return true;
     }
 
-    public AvailableOptions getOptions(AID id){
+    public AvailableOptions getOptions(AID id) {
         AvailableOptions avOpts = new AvailableOptions();
         Entity ent = getByAID(id);
 
@@ -121,31 +121,31 @@ public class Map {
     }
 
 
-    MoveOptions getMoveOptions(Entity ent){
+    MoveOptions getMoveOptions(Entity ent) {
         MoveOptions mvOpts = new MoveOptions();
         int i = ent.i;
         int j = ent.j;
-        if (canMoveTo(i+1, j)){
+        if (canMoveTo(i + 1, j)) {
             mvOpts.addDir(Config.Down);
         }
-        if (canMoveTo(i-1, j)){
+        if (canMoveTo(i - 1, j)) {
             mvOpts.addDir(Config.Up);
         }
-        if (canMoveTo(i, j+1)){
+        if (canMoveTo(i, j + 1)) {
             mvOpts.addDir(Config.Right);
         }
-        if (canMoveTo(i, j-1)){
+        if (canMoveTo(i, j - 1)) {
             mvOpts.addDir(Config.Left);
         }
         return mvOpts;
     }
 
-    AttackOptions getAttOpts(Entity ent){
+    AttackOptions getAttOpts(Entity ent) {
         AttackOptions attOpts = new AttackOptions();
-        for (Attack att: attacks){
+        for (Attack att : attacks) {
             int range = att.getRange();
-            for (Entity otherEnt: entities){
-                if (ent.entType != otherEnt.entType && canReach(ent, otherEnt, range)){
+            for (Entity otherEnt : entities) {
+                if (ent.entType != otherEnt.entType && canReach(ent, otherEnt, range)) {
                     AttackEnemy attEnemy = new AttackEnemy();
                     attEnemy.setEnemyID(otherEnt.mark);
                     attEnemy.setAttackType(att);
@@ -156,17 +156,17 @@ public class Map {
         return attOpts;
     }
 
-    boolean canReach(Entity one, Entity other, int range){
-        int di = other.i-one.i;
-        int dj = other.j-one.j;
-        int sqrd = di*di+dj*dj;
-        int dist = (int)Math.round(Math.sqrt(sqrd));
+    boolean canReach(Entity one, Entity other, int range) {
+        int di = other.i - one.i;
+        int dj = other.j - one.j;
+        int sqrd = di * di + dj * dj;
+        int dist = (int) Math.round(Math.sqrt(sqrd));
         return dist <= range;
     }
 
 
-    Entity getByAID(AID id){
-        for (Entity ent: entities){
+    Entity getByAID(AID id) {
+        for (Entity ent : entities) {
             if (ent.agent.equals(id)) {
                 return ent;
             }
@@ -202,7 +202,7 @@ public class Map {
         return true;
     }
 
-    void killEntity(AID id){
+    void killEntity(AID id) {
         Entity ent = getByAID(id);
         ent.isDead = true;
         entities.remove(ent);
@@ -254,7 +254,7 @@ public class Map {
             }
             str += "\n";
         }
-        return str.substring(0, str.length()-1);
+        return str.substring(0, str.length() - 1);
     }
 
 }

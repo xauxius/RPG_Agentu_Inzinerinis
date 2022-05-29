@@ -1,6 +1,5 @@
 import jade.core.Agent;
 import jade.wrapper.AgentContainer;
-import jade.wrapper.AgentController;
 
 public class AgentLauncher extends Agent {
     @Override
