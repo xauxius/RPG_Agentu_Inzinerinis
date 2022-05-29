@@ -123,8 +123,6 @@ public class DungeonMasterAg extends Agent {
                                         AgentContainer mc = agent.getContainerController();
                                         AgentController actrl = mc.getAgent(actChar.id.getLocalName(), AID.ISLOCALNAME);
                                         actrl.kill();
-                                    } catch (Exception ex) {
-                                        System.out.println("Killint nepavyko");
                                     }
                                     catch (Exception ex) {System.out.println("Could not kill agent");}
                                     //Prompt about killing a goblin
