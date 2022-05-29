@@ -51,7 +51,6 @@ public class DungeonMasterAg extends Agent {
     class MainLoop extends CyclicBehaviour { //Needs implementing: waiting for player, initiating the game
         DungeonMasterAg agent;
         ContentManager cm;
-        boolean isStarted;
         String prompt;
 
         public MainLoop(DungeonMasterAg agent) {
@@ -101,14 +100,25 @@ public class DungeonMasterAg extends Agent {
             if (mess != null){
                 try{
                     ContentElement c = cm.extractContent(mess);
-                    if (c instanceof SituationResponse && mess.getSender() == activeCharacters.get(turn).id){
+                    if (c instanceof SituationResponse && mess.getSender().getName().equalsIgnoreCase(activeCharacters.get(turn).id.getName())){
                         SituationResponse response = (SituationResponse) c;
                         Object action = response.getFinalAction();
-                        if (action instanceof CombatAction){
-                            CombatAction combatAction = (CombatAction) action;
-                            if (random.nextInt(100)<combatAction.getAttackEnem().getAttackType().getAccuracy()){
-                                ActiveChar actChar = DamageCharacter(combatAction.getAttackEnem().getEnemyID(), combatAction.getAttackEnem().getAttackType().getDamage());
+
+                        if (action instanceof AttackEnemy){
+                            AttackEnemy combatAction = (AttackEnemy) action;
+                            if (random.nextInt(100)<combatAction.getAttackType().getAccuracy()){
+                                ActiveChar actChar = DamageCharacter(combatAction.getEnemyID(), combatAction.getAttackType().getDamage());
                                 if (actChar.health <= 0 && actChar.id != player){
+                                    activeCharacters.remove(actChar);
+                                    map.killEntity(actChar.id);
+                                    say("Pavyko nudet viena goblina");
+                                    try
+                                    {
+                                        AgentContainer mc = agent.getContainerController();
+                                        AgentController actrl = mc.getAgent(actChar.id.getLocalName(), AID.ISLOCALNAME);
+                                        actrl.kill();
+                                    }
+                                    catch (Exception ex) {System.out.println("Killint nepavyko");}
                                     //Prompt about killing a goblin
                                 }
                             }
@@ -116,7 +126,7 @@ public class DungeonMasterAg extends Agent {
                         }
                         else{
                             MoveAction mvAction = (MoveAction) action;
-                            Map.Dirs dir = Map.Dirs.Up;
+                            Map.Dirs dir = Map.Dirs.Stay;
                             switch (mvAction.getDirection()){
                                 case Config.Up:
                                     dir = Map.Dirs.Up;
@@ -130,10 +140,14 @@ public class DungeonMasterAg extends Agent {
                                 case Config.Right:
                                     dir = Map.Dirs.Right;
                                     break;
+                                case Config.Stay:
+                                    dir = Map.Dirs.Stay;
+                                    break;
                             }
                             map.moveEntityByAID(mess.getSender(), dir);
                         }
                         turn = (turn+1)%activeCharacters.size();
+                        waitingForResp = false;
                     }
                 }
                 catch (Exception ex){
@@ -146,7 +160,7 @@ public class DungeonMasterAg extends Agent {
         void sendActionRequest() { //Here we should ask character whose turn it is to make an action, also we should somehow define on what actions can he make in that situation
             ActiveChar turnOf = activeCharacters.get(turn);
             sendSituationMessage(turnOf.id, map, map.getOptions(turnOf.id), "Something have happened", turnOf.health, getIsWon(), getIsLost());
-            waitingForResp = true;
+
         }
 
         void manageRegister(AID sender) {
@@ -171,6 +185,7 @@ public class DungeonMasterAg extends Agent {
             if (ga.getWantToJoin() == true) {
                 GameActionResponse resp = new GameActionResponse();
                 if (!isStarted) {
+                    System.out.println("launches");
                     resp.setSuccess(true);
                     player = sender;
                     agent.addBehaviour(new LaunchGame(agent));
@@ -211,20 +226,18 @@ public class DungeonMasterAg extends Agent {
 
         public LaunchGame(DungeonMasterAg dm) {
             this.dm = dm;
-            isStarted = true;
         }
 
         @Override
         public void action() {
-            isStarted = true;
             AgentContainer cont = myAgent.getContainerController();
-            activeCharacters.add(new ActiveChar(player, "*", 120));
+            activeCharacters.add(new ActiveChar(player, "*", 50));
             String[] markers = new String[]{"a", "b", "c", "d", "e"};
             for (int i = 0; i < 5; i++) {
                 try {
                     AgentController bot = cont.createNewAgent("Goblin" + bots.size(), "NPC", new Object[0]);
                     bot.start();
-                    AID botId = new AID(bot.getName(), AID.ISLOCALNAME);
+                    AID botId = new AID(bot.getName(), AID.ISGUID);
                     bots.add(botId);
                     activeCharacters.add(new ActiveChar(botId, markers[i], 20));
                 }
@@ -286,7 +299,16 @@ public class DungeonMasterAg extends Agent {
             e.printStackTrace();
         }
         send(response);
-        System.out.println("Zinute issiusta su mapais"+response);
+        if (sendTO == player){
+            if (won){
+                System.out.println("The game is won, congrats");
+            }
+            if (lost){
+                System.out.println("The game is lost :(");
+            }
+        }
+        //System.out.println("Zinute issiusta su mapais"+response);
+        waitingForResp = true;
     }
     //--Simple Methods--
 
