@@ -230,9 +230,9 @@ public class PlayGUI extends GuiAgent {
                         aLen = aopt.length;
                         mLen = mopt.length;
                         String[] result = new String[aLen + mLen];
-
                         System.arraycopy(mopt, 0, result, 0, mLen);
                         System.arraycopy(aopt, 0, result, mLen, aLen);
+                        myGui.ChangeLiveNumber(response.getHealth());
                         DungeonMasterAID = msg.getSender();
                         myGui.ChangeSelection(result);
 
