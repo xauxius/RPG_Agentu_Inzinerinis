@@ -147,21 +147,24 @@ public class DungeonMasterAg extends Agent{
         DungeonMasterAg dm;
         public LaunchGame(DungeonMasterAg dm){
             this.dm = dm;
+            isStarted = true;
         }
         @Override
         public void action(){
+            activeCharacters.add(player);
             AgentContainer cont = myAgent.getContainerController();
             for (int i = 0; i < 5; i++){
                 try{
                     AgentController bot = cont.createNewAgent("Goblin"+bots.size(), "NPC", new Object[0]);
                     bot.start();
-                    bots.add(new AID(bot.getName(), AID.ISLOCALNAME));
+                    AID botId = new AID(bot.getName(), AID.ISLOCALNAME);
+                    bots.add(botId);
+                    activeCharacters.add(botId);
                 }
                 catch (Exception e){
                     say("Something ain't right");
                 }
             }
-
             map = new Map(player, bots);
         }
     }
