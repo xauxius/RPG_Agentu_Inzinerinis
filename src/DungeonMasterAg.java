@@ -172,6 +172,18 @@ public class DungeonMasterAg extends Agent {
             move.addDir("UP");
             move.addDir("LEFT");
             move.addDir("RIGHT");
+            AttackEnemy atackene = new AttackEnemy();
+            Attack a = new Attack();
+            a.setAccuracy("2");
+            a.setAttackName("Smugis koja");
+            a.setDamage(5);
+            a.setRange(1);
+            a.setAttackDescription("Spyrixs kojaiii");
+
+            atackene.setAttackType(a);
+            atackene.setEnemyID("555");
+
+            attack.addAttackEnemyy(atackene);
             options.setMvOpts(move);
             options.setAttOpts(attack);
             sendSituationMessage(player, map, options, "Game is starting");

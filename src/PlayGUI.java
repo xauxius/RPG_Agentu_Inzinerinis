@@ -38,6 +38,7 @@ public class PlayGUI extends GuiAgent {
     MoveOptions mvOpt;
     int aLen;
     int mLen;
+    AID DungeonMasterAID;
 
     @Override
     public void setup() {
@@ -54,6 +55,11 @@ public class PlayGUI extends GuiAgent {
 
     @Override
     protected void onGuiEvent(GuiEvent ge) {
+        Ontology onto = RPGOntology.getInstance();
+        Codec codec = new SLCodec();
+        ContentManager cm = getContentManager();
+        cm.registerLanguage(codec);
+        cm.registerOntology(onto);
         int cmd = ge.getType();
         if (cmd == PlayGUI.DIFFICULTY) {
             // Kas ivyksta pasirinkus difficulty
@@ -66,11 +72,6 @@ public class PlayGUI extends GuiAgent {
             //Siunciam dungeon master zinute, kad priimtu zaisti
             String name = ge.getParameter(0).toString();
             AID DmAID = new AID(name, AID.ISLOCALNAME);
-            Ontology onto = RPGOntology.getInstance();
-            Codec codec = new SLCodec();
-            ContentManager cm = getContentManager();
-            cm.registerLanguage(codec);
-            cm.registerOntology(onto);
             ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
             request.setLanguage(codec.getName());
             request.setOntology(onto.getName());
@@ -88,11 +89,40 @@ public class PlayGUI extends GuiAgent {
         else if (cmd == PlayGUI.GAMING) {
             // Kas ivyksta pasirinkus ejima zaidime
             int index = (int) ge.getParameter(0); // Pasirinktas action
-            if(index <= mLen){
-                
+            if(index < mLen){
+                MoveAction action = new MoveAction();
+                action.setDirection((String)mvOpt.getDir().get(index));
+                ACLMessage response = new ACLMessage(ACLMessage.INFORM);
+                response.setLanguage(codec.getName());
+                response.setOntology(onto.getName());
+                response.clearAllReceiver();
+                response.addReceiver(DungeonMasterAID);
+                SituationResponse msg = new SituationResponse();
+                msg.setFinalAction(action);
+                try {
+                    cm.fillContent(response, msg);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                send(response);
             }
             else{
-                say("Atack action");
+                int attackInd = index-mLen;
+                System.out.println(attackInd);
+                AttackOptions action = new AttackOptions();
+                ACLMessage response = new ACLMessage(ACLMessage.INFORM);
+                response.setLanguage(codec.getName());
+                response.setOntology(onto.getName());
+                response.clearAllReceiver();
+                response.addReceiver(DungeonMasterAID);
+                SituationResponse msg = new SituationResponse();
+                msg.setFinalAction(((AttackEnemy)atOpt.getAttackEnemyy().get(attackInd)));
+                try {
+                    cm.fillContent(response, msg);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                send(response);
             }
         }
     }
@@ -203,6 +233,7 @@ public class PlayGUI extends GuiAgent {
 
                         System.arraycopy(mopt, 0, result, 0, mLen);
                         System.arraycopy(aopt, 0, result, mLen, aLen);
+                        DungeonMasterAID = msg.getSender();
                         myGui.ChangeSelection(result);
 
                     }
