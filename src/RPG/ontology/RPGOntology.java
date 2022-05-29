@@ -6,11 +6,11 @@ import jade.content.schema.*;
 
 /** file: RPGOntology.java
  * @author ontology bean generator
- * @version 2022/05/29, 15:28:18
+ * @version 2022/05/29, 16:10:17
  */
 public class RPGOntology extends jade.content.onto.Ontology  {
 
-  private static final long serialVersionUID = -3012293790907132644L;
+  private static final long serialVersionUID = -7169497409159083070L;
 
   //NAME
   public static final String ONTOLOGY_NAME = "RPG";
@@ -146,7 +146,7 @@ public class RPGOntology extends jade.content.onto.Ontology  {
     findDungeonMastersSchema.add(FINDDUNGEONMASTERS_DIFFICULTY, (TermSchema)getSchema(BasicOntology.STRING), ObjectSchema.MANDATORY);
     dungeonMastersListResponseSchema.add(DUNGEONMASTERSLISTRESPONSE_DMSLIST, dungeonMasterSchema, 0, ObjectSchema.UNLIMITED);
     requestToRegisterDMSchema.add(REQUESTTOREGISTERDM_MAGICWORD, (TermSchema)getSchema(BasicOntology.STRING), ObjectSchema.OPTIONAL);
-    situationResponseSchema.add(SITUATIONRESPONSE_FINALACTION, moveActionSchema, ObjectSchema.MANDATORY);
+    situationResponseSchema.add(SITUATIONRESPONSE_FINALACTION, new ConceptSchema("Concept"), ObjectSchema.MANDATORY);
     gameActionResponseSchema.add(GAMEACTIONRESPONSE_SUCCESS, (TermSchema)getSchema(BasicOntology.BOOLEAN), ObjectSchema.MANDATORY);
 
     // adding name mappings

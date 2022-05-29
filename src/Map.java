@@ -95,6 +95,15 @@ public class Map {
         }
     }
 
+    boolean isEnemiesCleared(){
+        for (Entity ent: entities){
+            if (ent.entType == EntType.Bot && !ent.isDead){
+                return false;
+            }
+        }
+        return true;
+    }
+
     public AvailableOptions getOptions(AID id){
         AvailableOptions avOpts = new AvailableOptions();
         Entity ent = getByAID(id);

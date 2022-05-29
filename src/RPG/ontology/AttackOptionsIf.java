@@ -6,7 +6,7 @@ import jade.util.leap.*;
 /**
 * Protege name: AttackOptions
 * @author ontology bean generator
-* @version 2022/05/29, 15:28:18
+* @version 2022/05/29, 16:10:17
 */
 public interface AttackOptionsIf extends jade.content.Concept {
 

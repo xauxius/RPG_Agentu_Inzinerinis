@@ -89,7 +89,8 @@ public class PlayGUI extends GuiAgent {
             // Kas ivyksta pasirinkus ejima zaidime
             int index = (int) ge.getParameter(0); // Pasirinktas action
             if(index <= mLen){
-                
+                MoveAction action = new MoveAction();
+                action.setDirection((String)mvOpt.getDir().get(index));
             }
             else{
                 say("Atack action");

@@ -6,11 +6,11 @@ import RPG.ontology.*;
 /**
 * Protege name: DungeonMaster
 * @author ontology bean generator
-* @version 2022/05/29, 15:28:18
+* @version 2022/05/29, 16:10:17
 */
 public class DungeonMaster implements DungeonMasterIf {
 
-  private static final long serialVersionUID = -3012293790907132644L;
+  private static final long serialVersionUID = -7169497409159083070L;
 
   private String _internalInstanceName = null;
 

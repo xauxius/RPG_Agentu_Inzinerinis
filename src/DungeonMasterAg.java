@@ -109,7 +109,7 @@ public class DungeonMasterAg extends Agent {
                             if (random.nextInt(100)<combatAction.getAttackEnem().getAttackType().getAccuracy()){
                                 ActiveChar actChar = DamageCharacter(combatAction.getAttackEnem().getEnemyID(), combatAction.getAttackEnem().getAttackType().getDamage());
                                 if (actChar.health <= 0 && actChar.id != player){
-
+                                    //Prompt about killing a goblin
                                 }
                             }
 
@@ -133,6 +133,7 @@ public class DungeonMasterAg extends Agent {
                             }
                             map.moveEntityByAID(mess.getSender(), dir);
                         }
+                        turn = (turn+1)%activeCharacters.size();
                     }
                 }
                 catch (Exception ex){
@@ -144,7 +145,7 @@ public class DungeonMasterAg extends Agent {
 
         void sendActionRequest() { //Here we should ask character whose turn it is to make an action, also we should somehow define on what actions can he make in that situation
             ActiveChar turnOf = activeCharacters.get(turn);
-            sendSituationMessage(turnOf.id, map, map.getOptions(turnOf.id), "Something have happened", turnOf.health, false, false); // Reiks padaryt won/lost salygas
+            sendSituationMessage(turnOf.id, map, map.getOptions(turnOf.id), "Something have happened", turnOf.health, getIsWon(), getIsLost());
             waitingForResp = true;
         }
 
@@ -187,6 +188,21 @@ public class DungeonMasterAg extends Agent {
 
             }
         }
+    }
+
+    boolean getIsWon(){
+        ActiveChar actChar = activeCharacters.get(turn);
+        if (actChar.id == player){
+            return map.isEnemiesCleared();
+        }
+        return false;
+    }
+    boolean getIsLost(){
+        ActiveChar actChar = activeCharacters.get(turn);
+        if (actChar.health <= 0){
+            return true;
+        }
+        return false;
     }
 
     //Launches bot agents, prepares map if necesary

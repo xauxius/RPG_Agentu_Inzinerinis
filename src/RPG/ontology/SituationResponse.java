@@ -6,11 +6,11 @@ import RPG.ontology.*;
 /**
 * Protege name: SituationResponse
 * @author ontology bean generator
-* @version 2022/05/29, 15:28:18
+* @version 2022/05/29, 16:10:17
 */
 public class SituationResponse implements SituationResponseIf {
 
-  private static final long serialVersionUID = -3012293790907132644L;
+  private static final long serialVersionUID = -7169497409159083070L;
 
   private String _internalInstanceName = null;
 
@@ -29,11 +29,11 @@ public class SituationResponse implements SituationResponseIf {
    /**
    * Protege name: FinalAction
    */
-   private MoveAction finalAction;
-   public void setFinalAction(MoveAction value) { 
+   private Object finalAction;
+   public void setFinalAction(Object value) { 
     this.finalAction=value;
    }
-   public MoveAction getFinalAction() {
+   public Object getFinalAction() {
      return this.finalAction;
    }
 
