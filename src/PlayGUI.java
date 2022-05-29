@@ -215,5 +215,27 @@ public class PlayGUI extends GuiAgent {
     void say(String text) {
         System.out.println("A[" + getLocalName() + "]: " + text);
     }
+
+    String[] moveOptsStr(MoveOptions opts){
+        String[] mvOpts = new String[4];
+        Iterator optIter = opts.getAllDir();
+        int i = 0;
+        while(optIter.hasNext()){
+            mvOpts[i] = "Move "+optIter.next().toString();
+            i++;
+        }
+        return mvOpts;
+    }
+    String[] attOptsStr(AttackOptions opts){
+        String[] attOpts = new String[50];
+        Iterator attIter = opts.getAllAttackEnemyy();
+        int i = 0;
+        while(attIter.hasNext()){
+            AttackEnemy attEn = (AttackEnemy) attIter.next();
+            attOpts[i] = "Attack "+attEn.getEnemyID()+", with attack: "+attEn.getAttackType().getAttackName()+", Damage: "+attEn.getAttackType().getDamage()+", Accuracy: "+attEn.getAttackType().getAccuracy();
+            i++;
+        }
+        return attOpts;
+    }
     //----
 }
