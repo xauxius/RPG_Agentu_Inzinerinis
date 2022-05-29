@@ -233,7 +233,8 @@ public class DungeonMasterAg extends Agent {
                 }
             }
             map = new Map(player, bots);
-
+            isStarted = true;
+            /*
             AvailableOptions options = new AvailableOptions();
             MoveOptions move = new MoveOptions();
             AttackOptions attack = new AttackOptions();
@@ -255,7 +256,7 @@ public class DungeonMasterAg extends Agent {
             options.setMvOpts(move);
             options.setAttOpts(attack);
             sendSituationMessage(player, map, options, "Game is starting", 5, false, false);
-
+            */
 
         }
     }
