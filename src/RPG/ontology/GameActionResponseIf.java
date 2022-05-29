@@ -5,7 +5,7 @@ package RPG.ontology;
 /**
 * Protege name: GameActionResponse
 * @author ontology bean generator
-* @version 2022/05/29, 01:52:37
+* @version 2022/05/29, 15:28:18
 */
 public interface GameActionResponseIf extends jade.content.Predicate {
 

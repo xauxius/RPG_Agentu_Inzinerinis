@@ -15,10 +15,10 @@ public class Config extends Agent {
     public static String Medium = "Medium";
     public static String Hard = "Hard";
     //Dirs
-    public static String Up = "Up";
-    public static String Down = "Down";
-    public static String Left = "Left";
-    public static String Right = "Right";
+    public static final String Up = "Up";
+    public static final String Down = "Down";
+    public static final String Left = "Left";
+    public static final String Right = "Right";
 
     //Methods
 

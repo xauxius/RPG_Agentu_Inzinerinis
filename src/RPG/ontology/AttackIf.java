@@ -5,7 +5,7 @@ package RPG.ontology;
 /**
 * Protege name: Attack
 * @author ontology bean generator
-* @version 2022/05/29, 01:52:37
+* @version 2022/05/29, 15:28:18
 */
 public interface AttackIf extends jade.content.Concept {
 
@@ -24,8 +24,8 @@ public interface AttackIf extends jade.content.Concept {
    /**
    * Protege name: Accuracy
    */
-   public void setAccuracy(String value);
-   public String getAccuracy();
+   public void setAccuracy(int value);
+   public int getAccuracy();
 
    /**
    * Protege name: AttackName

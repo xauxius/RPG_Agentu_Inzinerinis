@@ -217,7 +217,7 @@ public class PlayGUI extends GuiAgent {
     }
 
     String[] moveOptsStr(MoveOptions opts){
-        String[] mvOpts = new String[4];
+        String[] mvOpts = new String[opts.getDir().size()];
         Iterator optIter = opts.getAllDir();
         int i = 0;
         while(optIter.hasNext()){
@@ -227,7 +227,7 @@ public class PlayGUI extends GuiAgent {
         return mvOpts;
     }
     String[] attOptsStr(AttackOptions opts){
-        String[] attOpts = new String[50];
+        String[] attOpts = new String[opts.getAttackEnemyy().size()];
         Iterator attIter = opts.getAllAttackEnemyy();
         int i = 0;
         while(attIter.hasNext()){

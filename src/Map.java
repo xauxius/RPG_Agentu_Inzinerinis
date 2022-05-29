@@ -49,19 +49,19 @@ public class Map {
     ArrayList<Attack> formAttacks(){
         ArrayList<Attack> atts = new ArrayList<>();
         Attack kick = new Attack();
-        kick.setAccuracy("90");
+        kick.setAccuracy(90);
         kick.setDamage(8);
         kick.setRange(1);
         kick.setAttackName("Kick");
 
         Attack punch = new Attack();
-        punch.setAccuracy("50");
+        punch.setAccuracy(50);
         punch.setDamage(15);
         punch.setRange(1);
         punch.setAttackName("Face punch");
 
         Attack spell = new Attack();
-        spell.setAccuracy("65");
+        spell.setAccuracy(65);
         spell.setDamage(6);
         spell.setRange(5);
         spell.setAttackName("Simple spell");
@@ -188,6 +188,11 @@ public class Map {
         entity.setCords(i, j);
 
         return true;
+    }
+
+    void killEntity(AID id){
+        Entity ent = getByAID(id);
+        ent.isDead = true;
     }
 
     class Entity {

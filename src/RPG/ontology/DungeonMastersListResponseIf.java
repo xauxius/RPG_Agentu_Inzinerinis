@@ -6,7 +6,7 @@ import jade.util.leap.*;
 /**
 * Protege name: DungeonMastersListResponse
 * @author ontology bean generator
-* @version 2022/05/29, 01:52:37
+* @version 2022/05/29, 15:28:18
 */
 public interface DungeonMastersListResponseIf extends jade.content.Predicate {
 
