@@ -1,4 +1,4 @@
-import RPG.ontology.AvailableOptions;
+import RPG.ontology.*;
 import jade.core.AID;
 
 import java.util.ArrayList;
@@ -15,6 +15,7 @@ public class Map {
     static String Enemy = "E";
 
     ArrayList<Entity> entities = new ArrayList<Entity>();
+    ArrayList<Attack> attacks = new ArrayList<Attack>();
 
     public String[][] mapSkelet = {
             {Wall, Wall, Wall, Wall, Wall, Wall, Wall},
@@ -30,6 +31,7 @@ public class Map {
     };
 
     public Map(AID player, ArrayList<AID> bots){
+        this.attacks = formAttacks();
         N = mapSkelet.length;
         M = mapSkelet[0].length;
         int playI = 8;
@@ -40,6 +42,31 @@ public class Map {
         entities.add(new Entity(bots.get(2), EntType.Bot, 1, 5, "c"));
         entities.add(new Entity(bots.get(3), EntType.Bot, 2, 2, "d"));
         entities.add(new Entity(bots.get(4), EntType.Bot, 2, 4, "e"));
+    }
+
+    ArrayList<Attack> formAttacks(){
+        ArrayList<Attack> atts = new ArrayList<>();
+        Attack kick = new Attack();
+        kick.setAccuracy("90");
+        kick.setDamage(8);
+        kick.setRange(1);
+        kick.setAttackName("Kick");
+
+        Attack punch = new Attack();
+        punch.setAccuracy("50");
+        punch.setDamage(15);
+        punch.setRange(1);
+        punch.setAttackName("Face punch");
+
+        Attack spell = new Attack();
+        spell.setAccuracy("65");
+        spell.setDamage(6);
+        spell.setRange(5);
+        spell.setAttackName("Simple spell");
+        atts.add(kick);
+        atts.add(punch);
+        atts.add(spell);
+        return atts;
     }
 
 
@@ -70,11 +97,58 @@ public class Map {
         AvailableOptions avOpts = new AvailableOptions();
         Entity ent = getByAID(id);
 
+        MoveOptions mvOpts = getMoveOptions(ent);
+        AttackOptions attOpts = getAttOpts(ent);
 
+        avOpts.setMvOpts(mvOpts);
+        avOpts.setAttOpts(attOpts);
 
         return avOpts;
     }
 
+
+    MoveOptions getMoveOptions(Entity ent){
+        MoveOptions mvOpts = new MoveOptions();
+        int i = ent.i;
+        int j = ent.j;
+        if (canMoveTo(i+1, j)){
+            mvOpts.addDir(Config.Down);
+        }
+        if (canMoveTo(i-1, j)){
+            mvOpts.addDir(Config.Up);
+        }
+        if (canMoveTo(i, j+1)){
+            mvOpts.addDir(Config.Right);
+        }
+        if (canMoveTo(i, j-1)){
+            mvOpts.addDir(Config.Left);
+        }
+        return mvOpts;
+    }
+
+    AttackOptions getAttOpts(Entity ent){
+        AttackOptions attOpts = new AttackOptions();
+        for (Attack att: attacks){
+            int range = att.getRange();
+            for (Entity otherEnt: entities){
+                if (ent.entType != otherEnt.entType && canReach(ent, otherEnt, range)){
+                    AttackEnemy attEnemy = new AttackEnemy();
+                    attEnemy.setEnemyID(otherEnt.mark);
+                    attEnemy.setAttackType(att);
+                    attOpts.addAttackEnemyy(attEnemy);
+                }
+            }
+        }
+        return attOpts;
+    }
+
+    boolean canReach(Entity one, Entity other, int range){
+        int di = other.i-one.i;
+        int dj = other.j-one.j;
+        int sqrd = di*di+dj*dj;
+        int dist = (int)Math.round(Math.sqrt(sqrd));
+        return dist <= range;
+    }
 
 
     Entity getByAID(AID id){
@@ -158,7 +232,7 @@ public class Map {
             }
             str+="\n";
         }
-        return str;
+        return str.substring(0, str.length()-1);
     }
 
 }
