@@ -201,7 +201,7 @@ public class PlayGUI extends GuiAgent {
                     if (c instanceof DungeonMastersListResponse) {
                         DungeonMastersListResponse dmsList = (DungeonMastersListResponse) c;
                         Iterator dmIter = dmsList.getAllDMsList();
-                        String[] DungeonMastersNames = new String[100];
+                        String[] DungeonMastersNames = new String[dmsList.getDMsList().size()];
                         int i = 0;
                         while (dmIter.hasNext()) {
                             availableDMs.add((DungeonMaster) dmIter.next());
