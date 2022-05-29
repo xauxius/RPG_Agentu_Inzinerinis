@@ -9,6 +9,7 @@ import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 
+import java.util.Iterator;
 import java.util.Random;
 
 //Class for bots
@@ -20,8 +21,7 @@ public class NPC extends Agent {
         addBehaviour(new ProcessActionRequest());
     }
 
-    class ProcessActionRequest() extends CyclicBehaviour {
-
+    class ProcessActionRequest extends CyclicBehaviour {
         @Override
         public void action() {
             ACLMessage mess = receive();
@@ -33,20 +33,42 @@ public class NPC extends Agent {
                         AvailableOptions opts = ((SituationResponseRequest) c).getOptions();
                         Integer attOptsN = opts.getAttOpts().getAttackEnemyy().size();
                         SituationResponse response = new SituationResponse();
-                        if (attOptsN > 0 && rand.nextInt(100) < 70){
-                            int choice = rand.nextInt(attOptsN);
-                            response.setFinalAction(opts.getAttOpts().getAttackEnemyy().get(choice));
+                        Object[] allOpts = new Object[opts.getMvOpts().getDir().size()+opts.getAttOpts().getAttackEnemyy().size()];
+                        int i = 0;
+                        Iterator mvOpts = opts.getMvOpts().getAllDir();
+                        Iterator atOpts = opts.getAttOpts().getAllAttackEnemyy();
+                        while (mvOpts.hasNext()){
+                            MoveAction mvAct = new MoveAction();
+                            mvAct.setDirection((String) mvOpts.next());
+                            allOpts[i] = mvAct;
+                            i++;
                         }
-                        else{
-                            int choice = rand.nextInt(opts.getMvOpts().getDir().size());
-                            response.setFinalAction(opts.getMvOpts().getDir().get(choice));
+                        while(atOpts.hasNext()){
+                            allOpts[i] = atOpts.next();
+                            i++;
                         }
+                        Object randOb = allOpts[rand.nextInt(i)];
+                        response.setFinalAction(randOb);
+
+                        System.out.println(response.getFinalAction());
                         ACLMessage oms = formMSG(mess.getSender());
                         cm.fillContent(oms, response);
                         send(oms);
                     }
                 }
                 catch (Exception ex){
+                    SituationResponse response = new SituationResponse();
+                    MoveAction moveAct = new MoveAction();
+                    moveAct.setDirection("Stay");
+                    response.setFinalAction(moveAct);
+                    ACLMessage oms = formMSG(mess.getSender());
+                    try{
+                        getCM().fillContent(oms, response);
+                    }
+                    catch (Exception exe){
+                        say("Welp, idk now");
+                    }
+                    send(oms);
                     say("Could not take action, that will freeze the game: "+ex.getMessage());
                 }
 

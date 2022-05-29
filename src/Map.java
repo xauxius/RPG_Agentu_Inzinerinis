@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public class Map {
     public static enum EntType {Player, Bot}
 
-    public static enum Dirs {Up, Left, Down, Right}
+    public static enum Dirs {Up, Left, Down, Right, Stay}
 
     public int N;
     public int M;
@@ -61,8 +61,8 @@ public class Map {
         punch.setAttackName("Face punch");
 
         Attack spell = new Attack();
-        spell.setAccuracy(65);
-        spell.setDamage(6);
+        spell.setAccuracy(100);
+        spell.setDamage(50);
         spell.setRange(5);
         spell.setAttackName("Simple spell");
         atts.add(kick);
@@ -85,6 +85,9 @@ public class Map {
     }
 
     boolean moveEntityByAID(AID id, Dirs dir){
+        if (dir == Dirs.Stay){
+            return true;
+        }
         Entity ent = getByAID(id);
         if (ent != null){
             return moveEntity(ent, dir);
@@ -202,6 +205,7 @@ public class Map {
     void killEntity(AID id){
         Entity ent = getByAID(id);
         ent.isDead = true;
+        entities.remove(ent);
     }
 
     class Entity {

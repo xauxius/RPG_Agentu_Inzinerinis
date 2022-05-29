@@ -19,6 +19,7 @@ public class Config extends Agent {
     public static final String Down = "Down";
     public static final String Left = "Left";
     public static final String Right = "Right";
+    public static final String Stay = "Stay";
 
     //Methods
 
