@@ -115,7 +115,6 @@ public class DungeonMasterAg extends Agent {
                                 ActiveChar actChar = DamageCharacter(combatAction.getEnemyID(), combatAction.getAttackType().getDamage());
 
                                 if (actChar.health <= 0 && actChar.id != player){
-                                    prompt += attPromptMess;
                                     prompt += "Goblin "+actChar.marker+" have suffered a horrible death\n";
                                     activeCharacters.remove(actChar);
                                     map.killEntity(actChar.id);
@@ -132,8 +131,8 @@ public class DungeonMasterAg extends Agent {
                             }
                             else{
                                 attPromptMess += " missed really badly :/\n";
-                                prompt += attPromptMess;
                             }
+                            prompt += attPromptMess;
                         }
                         else{
                             MoveAction mvAction = (MoveAction) action;
@@ -247,7 +246,8 @@ public class DungeonMasterAg extends Agent {
         @Override
         public void action() {
             AgentContainer cont = myAgent.getContainerController();
-            activeCharacters.add(new ActiveChar(player, "*", 5000));
+            int health = difficulty.equals(Config.Easy) ? 200 : difficulty.equals(Config.Medium) ? 100 : 50;
+            activeCharacters.add(new ActiveChar(player, "*", health));
             String[] markers = new String[]{"a", "b", "c", "d", "e"};
             for (int i = 0; i < 5; i++) {
                 try {
