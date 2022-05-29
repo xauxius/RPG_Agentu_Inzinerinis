@@ -26,6 +26,8 @@ public class GameGUI extends javax.swing.JFrame {
     }
     public void ChangePrompt(String string){
         DungeonMasterTextArea.append(string+"\n");
+        DungeonMasterTextArea.setCaretPosition(DungeonMasterTextArea.getDocument().getLength());
+
     }
     public void ChangeMap(String string){
         MapTextArea.setText(string);
