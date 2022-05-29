@@ -6,11 +6,11 @@ import RPG.ontology.*;
 /**
 * Protege name: SituationResponseRequest
 * @author ontology bean generator
-* @version 2022/05/29, 01:52:37
+* @version 2022/05/29, 16:10:17
 */
 public class SituationResponseRequest implements SituationResponseRequestIf {
 
-  private static final long serialVersionUID = -726952151374612226L;
+  private static final long serialVersionUID = -7169497409159083070L;
 
   private String _internalInstanceName = null;
 
@@ -27,6 +27,17 @@ public class SituationResponseRequest implements SituationResponseRequestIf {
   }
 
    /**
+   * Protege name: GameWon
+   */
+   private boolean gameWon;
+   public void setGameWon(boolean value) { 
+    this.gameWon=value;
+   }
+   public boolean getGameWon() {
+     return this.gameWon;
+   }
+
+   /**
    * Protege name: Propmpt
    */
    private String propmpt;
@@ -35,6 +46,17 @@ public class SituationResponseRequest implements SituationResponseRequestIf {
    }
    public String getPropmpt() {
      return this.propmpt;
+   }
+
+   /**
+   * Protege name: GameLost
+   */
+   private boolean gameLost;
+   public void setGameLost(boolean value) { 
+    this.gameLost=value;
+   }
+   public boolean getGameLost() {
+     return this.gameLost;
    }
 
    /**
@@ -57,6 +79,17 @@ public class SituationResponseRequest implements SituationResponseRequestIf {
    }
    public String getMap() {
      return this.map;
+   }
+
+   /**
+   * Protege name: Health
+   */
+   private int health;
+   public void setHealth(int value) { 
+    this.health=value;
+   }
+   public int getHealth() {
+     return this.health;
    }
 
 }
