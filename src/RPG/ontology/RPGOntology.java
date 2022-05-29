@@ -6,11 +6,11 @@ import jade.content.schema.*;
 
 /** file: RPGOntology.java
  * @author ontology bean generator
- * @version 2022/05/29, 01:52:37
+ * @version 2022/05/29, 16:10:17
  */
 public class RPGOntology extends jade.content.onto.Ontology  {
 
-  private static final long serialVersionUID = -726952151374612226L;
+  private static final long serialVersionUID = -7169497409159083070L;
 
   //NAME
   public static final String ONTOLOGY_NAME = "RPG";
@@ -37,14 +37,17 @@ public class RPGOntology extends jade.content.onto.Ontology  {
     public static final String GAMEACTION="GameAction";
     public static final String REGISTERDMRESPONSE_DM="DM";
     public static final String REGISTERDMRESPONSE="RegisterDMResponse";
+    public static final String SITUATIONRESPONSEREQUEST_HEALTH="Health";
     public static final String SITUATIONRESPONSEREQUEST_MAP="Map";
     public static final String SITUATIONRESPONSEREQUEST_OPTIONS="Options";
+    public static final String SITUATIONRESPONSEREQUEST_GAMELOST="GameLost";
     public static final String SITUATIONRESPONSEREQUEST_PROPMPT="Propmpt";
+    public static final String SITUATIONRESPONSEREQUEST_GAMEWON="GameWon";
     public static final String SITUATIONRESPONSEREQUEST="SituationResponseRequest";
-    public static final String COMBATACTION_ATTACKENEM="AttackEnem";
-    public static final String COMBATACTION="CombatAction";
     public static final String ATTACKOPTIONS_ATTACKENEMYY="AttackEnemyy";
     public static final String ATTACKOPTIONS="AttackOptions";
+    public static final String COMBATACTION_ATTACKENEM="AttackEnem";
+    public static final String COMBATACTION="CombatAction";
     public static final String DUNGEONMASTER_DESCRIPTION="Description";
     public static final String DUNGEONMASTER_DIFFICULTY="Difficulty";
     public static final String DUNGEONMASTER_NAME="name";
@@ -86,10 +89,10 @@ public class RPGOntology extends jade.content.onto.Ontology  {
     add(moveActionSchema, RPG.ontology.MoveAction.class);
     ConceptSchema dungeonMasterSchema = new ConceptSchema(DUNGEONMASTER);
     add(dungeonMasterSchema, RPG.ontology.DungeonMaster.class);
-    ConceptSchema attackOptionsSchema = new ConceptSchema(ATTACKOPTIONS);
-    add(attackOptionsSchema, RPG.ontology.AttackOptions.class);
     ConceptSchema combatActionSchema = new ConceptSchema(COMBATACTION);
     add(combatActionSchema, RPG.ontology.CombatAction.class);
+    ConceptSchema attackOptionsSchema = new ConceptSchema(ATTACKOPTIONS);
+    add(attackOptionsSchema, RPG.ontology.AttackOptions.class);
 
     // adding AgentAction(s)
 
@@ -117,31 +120,34 @@ public class RPGOntology extends jade.content.onto.Ontology  {
     // adding fields
     attackSchema.add(ATTACK_ATTACKDESCRIPTION, (TermSchema)getSchema(BasicOntology.STRING), ObjectSchema.OPTIONAL);
     attackSchema.add(ATTACK_RANGE, (TermSchema)getSchema(BasicOntology.INTEGER), ObjectSchema.MANDATORY);
-    attackSchema.add(ATTACK_ACCURACY, (TermSchema)getSchema(BasicOntology.STRING), ObjectSchema.MANDATORY);
+    attackSchema.add(ATTACK_ACCURACY, (TermSchema)getSchema(BasicOntology.INTEGER), ObjectSchema.MANDATORY);
     attackSchema.add(ATTACK_ATTACKNAME, (TermSchema)getSchema(BasicOntology.STRING), ObjectSchema.MANDATORY);
     attackSchema.add(ATTACK_DAMAGE, (TermSchema)getSchema(BasicOntology.INTEGER), ObjectSchema.MANDATORY);
-    availableOptionsSchema.add(AVAILABLEOPTIONS_ATTOPTS, attackOptionsSchema, ObjectSchema.MANDATORY);
-    availableOptionsSchema.add(AVAILABLEOPTIONS_MVOPTS, moveOptionsSchema, ObjectSchema.MANDATORY);
+    availableOptionsSchema.add(AVAILABLEOPTIONS_ATTOPTS, attackOptionsSchema, ObjectSchema.OPTIONAL);
+    availableOptionsSchema.add(AVAILABLEOPTIONS_MVOPTS, moveOptionsSchema, ObjectSchema.OPTIONAL);
     moveOptionsSchema.add(MOVEOPTIONS_DIR, (TermSchema)getSchema(BasicOntology.STRING), 0, ObjectSchema.UNLIMITED);
     attackEnemySchema.add(ATTACKENEMY_ATTACKTYPE, attackSchema, ObjectSchema.MANDATORY);
     attackEnemySchema.add(ATTACKENEMY_ENEMYID, (TermSchema)getSchema(BasicOntology.STRING), ObjectSchema.MANDATORY);
     moveActionSchema.add(MOVEACTION_DIRECTION, (TermSchema)getSchema(BasicOntology.STRING), ObjectSchema.MANDATORY);
     dungeonMasterSchema.add(DUNGEONMASTER_NAME, (TermSchema)getSchema(BasicOntology.STRING), ObjectSchema.MANDATORY);
-    dungeonMasterSchema.add(DUNGEONMASTER_DIFFICULTY, (TermSchema)getSchema(BasicOntology.STRING), ObjectSchema.OPTIONAL);
+    dungeonMasterSchema.add(DUNGEONMASTER_DIFFICULTY, (TermSchema)getSchema(BasicOntology.STRING), ObjectSchema.MANDATORY);
     dungeonMasterSchema.add(DUNGEONMASTER_DESCRIPTION, (TermSchema)getSchema(BasicOntology.STRING), ObjectSchema.OPTIONAL);
-    attackOptionsSchema.add(ATTACKOPTIONS_ATTACKENEMYY, attackEnemySchema, 0, ObjectSchema.UNLIMITED);
     combatActionSchema.add(COMBATACTION_ATTACKENEM, attackEnemySchema, ObjectSchema.MANDATORY);
+    attackOptionsSchema.add(ATTACKOPTIONS_ATTACKENEMYY, attackEnemySchema, 0, ObjectSchema.UNLIMITED);
+    situationResponseRequestSchema.add(SITUATIONRESPONSEREQUEST_GAMEWON, (TermSchema)getSchema(BasicOntology.BOOLEAN), ObjectSchema.OPTIONAL);
     situationResponseRequestSchema.add(SITUATIONRESPONSEREQUEST_PROPMPT, (TermSchema)getSchema(BasicOntology.STRING), ObjectSchema.OPTIONAL);
+    situationResponseRequestSchema.add(SITUATIONRESPONSEREQUEST_GAMELOST, (TermSchema)getSchema(BasicOntology.BOOLEAN), ObjectSchema.OPTIONAL);
     situationResponseRequestSchema.add(SITUATIONRESPONSEREQUEST_OPTIONS, availableOptionsSchema, ObjectSchema.MANDATORY);
     situationResponseRequestSchema.add(SITUATIONRESPONSEREQUEST_MAP, (TermSchema)getSchema(BasicOntology.STRING), ObjectSchema.OPTIONAL);
+    situationResponseRequestSchema.add(SITUATIONRESPONSEREQUEST_HEALTH, (TermSchema)getSchema(BasicOntology.INTEGER), ObjectSchema.MANDATORY);
     registerDMResponseSchema.add(REGISTERDMRESPONSE_DM, dungeonMasterSchema, ObjectSchema.MANDATORY);
     gameActionSchema.add(GAMEACTION_WANTTOJOIN, (TermSchema)getSchema(BasicOntology.BOOLEAN), ObjectSchema.MANDATORY);
     gameActionSchema.add(GAMEACTION_WANTTOLEAVE, (TermSchema)getSchema(BasicOntology.BOOLEAN), ObjectSchema.MANDATORY);
-    findDungeonMastersSchema.add(FINDDUNGEONMASTERS_DIFFICULTY, (TermSchema)getSchema(BasicOntology.STRING), ObjectSchema.OPTIONAL);
+    findDungeonMastersSchema.add(FINDDUNGEONMASTERS_DIFFICULTY, (TermSchema)getSchema(BasicOntology.STRING), ObjectSchema.MANDATORY);
     dungeonMastersListResponseSchema.add(DUNGEONMASTERSLISTRESPONSE_DMSLIST, dungeonMasterSchema, 0, ObjectSchema.UNLIMITED);
     requestToRegisterDMSchema.add(REQUESTTOREGISTERDM_MAGICWORD, (TermSchema)getSchema(BasicOntology.STRING), ObjectSchema.OPTIONAL);
     situationResponseSchema.add(SITUATIONRESPONSE_FINALACTION, new ConceptSchema("Concept"), ObjectSchema.MANDATORY);
-    gameActionResponseSchema.add(GAMEACTIONRESPONSE_SUCCESS, (TermSchema)getSchema(BasicOntology.BOOLEAN), ObjectSchema.OPTIONAL);
+    gameActionResponseSchema.add(GAMEACTIONRESPONSE_SUCCESS, (TermSchema)getSchema(BasicOntology.BOOLEAN), ObjectSchema.MANDATORY);
 
     // adding name mappings
 

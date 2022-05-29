@@ -6,11 +6,11 @@ import RPG.ontology.*;
 /**
 * Protege name: Attack
 * @author ontology bean generator
-* @version 2022/05/29, 01:52:37
+* @version 2022/05/29, 16:10:17
 */
 public class Attack implements AttackIf {
 
-  private static final long serialVersionUID = -726952151374612226L;
+  private static final long serialVersionUID = -7169497409159083070L;
 
   private String _internalInstanceName = null;
 
@@ -51,11 +51,11 @@ public class Attack implements AttackIf {
    /**
    * Protege name: Accuracy
    */
-   private String accuracy;
-   public void setAccuracy(String value) { 
+   private int accuracy;
+   public void setAccuracy(int value) { 
     this.accuracy=value;
    }
-   public String getAccuracy() {
+   public int getAccuracy() {
      return this.accuracy;
    }
 

@@ -24,7 +24,7 @@ public class GameGUI extends javax.swing.JFrame {
         });
     }
     public void ChangePrompt(String string){
-        DungeonMasterTextArea.setText(string);
+        DungeonMasterTextArea.append(string+"\n");
     }
     public void ChangeMap(String string){
         MapTextArea.setText(string);
@@ -221,6 +221,7 @@ public class GameGUI extends javax.swing.JFrame {
         PlayGUI.STATUS = 1;
         String[] DifficultiesSelection = new String[]{"Easy", "Medium", "Hard"};
         this.ChangeSelection(DifficultiesSelection);
+        DungeonMasterTextArea.setText("");
 
     }
     private void ActionButtonActionPerformed(java.awt.event.ActionEvent evt) {
@@ -239,7 +240,7 @@ public class GameGUI extends javax.swing.JFrame {
         }
         else if(PlayGUI.STATUS == PlayGUI.GAMING){
             GuiEvent ge = new GuiEvent(this, PlayGUI.GAMING);
-            ge.addParameter(ActionsList.getSelectedValue()); // Or get selected index
+            ge.addParameter(ActionsList.getSelectedIndex()); // Or get selected index
             myAgent.postGuiEvent(ge);
         }
 
