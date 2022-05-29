@@ -10,13 +10,12 @@ import jade.lang.acl.ACLMessage;
 //Class for bots
 public class NPC extends Agent {
     @Override
-    public void setup(){
+    public void setup() {
         say("Graghh, i am a Goblin");
     }
 
 
-
-    public ContentManager getCM(){
+    public ContentManager getCM() {
         Ontology onto = RPGOntology.getInstance();
         Codec codec = new SLCodec();
         ContentManager cm = getContentManager();
@@ -24,7 +23,8 @@ public class NPC extends Agent {
         cm.registerOntology(onto);
         return cm;
     }
-    public ACLMessage formMSG(AID sendTO){
+
+    public ACLMessage formMSG(AID sendTO) {
         Ontology onto = RPGOntology.getInstance();
         Codec codec = new SLCodec();
         ACLMessage omsg = new ACLMessage(ACLMessage.INFORM);
@@ -35,10 +35,11 @@ public class NPC extends Agent {
         return omsg;
     }
 
-    void say(String text){
-        System.out.println("A["+getLocalName()+"]: "+text);
+    void say(String text) {
+        System.out.println("A[" + getLocalName() + "]: " + text);
     }
-    void say(String text, String beh){
-        System.out.println("A["+getLocalName()+"|"+beh+"]: "+text);
+
+    void say(String text, String beh) {
+        System.out.println("A[" + getLocalName() + "|" + beh + "]: " + text);
     }
 }
