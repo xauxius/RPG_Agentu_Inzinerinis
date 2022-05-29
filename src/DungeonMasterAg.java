@@ -78,7 +78,6 @@ public class DungeonMasterAg extends Agent {
 
             if (mess != null) {
                 try {
-                    System.out.println(mess.getContent());
                     ContentElement c = cm.extractContent(mess);
                     if (c instanceof RequestToRegisterDM) {
                         manageRegister(mess.getSender());
@@ -119,14 +118,15 @@ public class DungeonMasterAg extends Agent {
                                     prompt += "Goblin " + actChar.marker + " have suffered a horrible death\n";
                                     activeCharacters.remove(actChar);
                                     map.killEntity(actChar.id);
-                                    try {
-                                        System.out.println("Killing " + actChar.id.getLocalName());
+                                    try
+                                    {
                                         AgentContainer mc = agent.getContainerController();
                                         AgentController actrl = mc.getAgent(actChar.id.getLocalName(), AID.ISLOCALNAME);
                                         actrl.kill();
                                     } catch (Exception ex) {
                                         System.out.println("Killint nepavyko");
                                     }
+                                    catch (Exception ex) {System.out.println("Could not kill agent");}
                                     //Prompt about killing a goblin
                                 }
                             }
@@ -200,7 +200,6 @@ public class DungeonMasterAg extends Agent {
             if (ga.getWantToJoin() == true) {
                 GameActionResponse resp = new GameActionResponse();
                 if (!isStarted) {
-                    System.out.println("launches");
                     resp.setSuccess(true);
                     player = sender;
                     agent.addBehaviour(new LaunchGame(agent));
