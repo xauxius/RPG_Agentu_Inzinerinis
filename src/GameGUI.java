@@ -241,6 +241,7 @@ public class GameGUI extends javax.swing.JFrame {
         this.ChangeSelection(DifficultiesSelection);
         DungeonMasterTextArea.setText("");
         MapTextArea.setText("");
+        LivesNumber.setText("0");
 
     }
     private void ActionButtonActionPerformed(java.awt.event.ActionEvent evt) {
