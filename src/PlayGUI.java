@@ -17,7 +17,9 @@ import jade.gui.GuiEvent;
 import jade.lang.acl.ACLMessage;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
 
 public class PlayGUI extends GuiAgent {
     public static int STATUS = 0;
@@ -32,6 +34,10 @@ public class PlayGUI extends GuiAgent {
     ArrayList<DungeonMaster> availableDMs = new ArrayList<>();
     AID DMsProvider;
     String[] DifficultiesSelection = new String[]{"Easy", "Medium", "Hard"};
+    AttackOptions atOpt;
+    MoveOptions mvOpt;
+    int aLen;
+    int mLen;
 
     @Override
     public void setup() {
@@ -80,7 +86,14 @@ public class PlayGUI extends GuiAgent {
             send(request);
         }
         else if (cmd == PlayGUI.GAMING) {
-            // Kas 5vyksta pasirinkus ejima zaidime
+            // Kas ivyksta pasirinkus ejima zaidime
+            int index = (int) ge.getParameter(0); // Pasirinktas action
+            if(index <= mLen){
+                
+            }
+            else{
+                say("Atack action");
+            }
         }
     }
 
@@ -179,8 +192,18 @@ public class PlayGUI extends GuiAgent {
                         SituationResponseRequest response = (SituationResponseRequest) c;
                         myGui.ChangeMap(response.getMap());
                         myGui.ChangePrompt(response.getPropmpt());
-                        //GetACtions
-//                        myGui.ChangeSelection();
+                        AvailableOptions opt = response.getOptions();
+                        atOpt = opt.getAttOpts();
+                        mvOpt = opt.getMvOpts();
+                        String[] aopt = attOptsStr(atOpt);
+                        String[] mopt = moveOptsStr(mvOpt);
+                        aLen = aopt.length;
+                        mLen = mopt.length;
+                        String[] result = new String[aLen + mLen];
+
+                        System.arraycopy(mopt, 0, result, 0, mLen);
+                        System.arraycopy(aopt, 0, result, mLen, aLen);
+                        myGui.ChangeSelection(result);
 
                     }
                 } catch (Exception ex) {
