@@ -23,6 +23,12 @@ public class GameGUI extends javax.swing.JFrame {
             public String getElementAt(int i) { return strings[i]; }
         });
     }
+    public void ChangePrompt(String string){
+        DungeonMasterTextArea.setText(string);
+    }
+    public void ChangeMap(String string){
+        MapTextArea.setText(string);
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -93,6 +99,8 @@ public class GameGUI extends javax.swing.JFrame {
 
         MapTextArea.setColumns(20);
         MapTextArea.setRows(5);
+        MapTextArea.setFont(new java.awt.Font("Consolas", 1, 24));
+        MapTextArea.setAutoscrolls(false);
         jScrollPane2.setViewportView(MapTextArea);
 
         ActionsList.setModel(new javax.swing.AbstractListModel<String>() {

@@ -154,7 +154,7 @@ public class PlayGUI extends GuiAgent {
                 try {
                     ContentElement c = cm.extractContent(msg);
 
-                    System.out.println("A[" + getLocalName() + "] Message received " + c);
+                    System.out.println("A[" + getLocalName() + "] Message received hereee");
                     if (c instanceof DungeonMastersListResponse) {
                         DungeonMastersListResponse dmsList = (DungeonMastersListResponse) c;
                         Iterator dmIter = dmsList.getAllDMsList();
@@ -175,9 +175,16 @@ public class PlayGUI extends GuiAgent {
                         }
 
                     }
+                    if (c instanceof SituationResponseRequest){
+                        SituationResponseRequest response = (SituationResponseRequest) c;
+                        myGui.ChangeMap(response.getMap());
+                        myGui.ChangePrompt(response.getPropmpt());
+                        //GetACtions
+//                        myGui.ChangeSelection();
+
+                    }
                 } catch (Exception ex) {
                     System.out.println("Sad thing at dm list");
-                    myGui.ChangeSelection(new String[]{"Dungeon masters pasirinkto lygio nera, Pasirinkite kita..."});
                 }
             }
         }

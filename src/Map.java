@@ -162,7 +162,7 @@ public class Map {
             }
             str += "\n";
         }
-        return str;
+        return str.substring(0, str.length()-1);
     }
 
 }

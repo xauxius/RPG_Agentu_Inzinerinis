@@ -163,10 +163,43 @@ public class DungeonMasterAg extends Agent {
             }
 
             map = new Map(player, bots);
+            AvailableOptions options = new AvailableOptions();
+            MoveOptions move = new MoveOptions();
+            AttackOptions attack = new AttackOptions();
+            move.addDir("UP");
+            move.addDir("LEFT");
+            move.addDir("RIGHT");
+            options.setMvOpts(move);
+            options.setAttOpts(attack);
+            sendSituationMessage(player, map, options, "Game is starting");
+
         }
     }
     //----
 
+    public void sendSituationMessage(AID sendTO, Map map, AvailableOptions options, String promt){
+        Ontology onto = RPGOntology.getInstance();
+        Codec codec = new SLCodec();
+        ContentManager cm = getContentManager();
+        cm.registerLanguage(codec);
+        cm.registerOntology(onto);
+        ACLMessage response = new ACLMessage(ACLMessage.INFORM);
+        response.setLanguage(codec.getName());
+        response.setOntology(onto.getName());
+        response.clearAllReceiver();
+        response.addReceiver(sendTO);
+        SituationResponseRequest msg = new SituationResponseRequest();
+        msg.setPropmpt(promt);
+        msg.setOptions(options);
+        msg.setMap(map.toString());
+        try {
+            cm.fillContent(response, msg);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        send(response);
+        System.out.println("Zinute issiusta su mapais"+response);
+    }
     //--Simple Methods--
 
     public ContentManager getCM() {
