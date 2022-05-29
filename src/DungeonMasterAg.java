@@ -147,6 +147,7 @@ public class DungeonMasterAg extends Agent {
 
         public LaunchGame(DungeonMasterAg dm) {
             this.dm = dm;
+            isStarted = true;
         }
 
         @Override
@@ -156,12 +157,14 @@ public class DungeonMasterAg extends Agent {
                 try {
                     AgentController bot = cont.createNewAgent("Goblin" + bots.size(), "NPC", new Object[0]);
                     bot.start();
-                    bots.add(new AID(bot.getName(), AID.ISLOCALNAME));
-                } catch (Exception e) {
+                    AID botId = new AID(bot.getName(), AID.ISLOCALNAME);
+                    bots.add(botId);
+                    activeCharacters.add(botId);
+                }
+                catch (Exception e){
                     say("Something ain't right");
                 }
             }
-
             map = new Map(player, bots);
             AvailableOptions options = new AvailableOptions();
             MoveOptions move = new MoveOptions();
