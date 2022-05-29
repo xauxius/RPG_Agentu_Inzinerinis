@@ -24,7 +24,6 @@ public class DungeonMasterAg extends Agent {
     ArrayList<AID> bots = new ArrayList<>();
     String description;
     String difficulty;
-    ArrayList<NPC> viableBots = new ArrayList<>();
     int turn = 0;
     boolean waitingForResp;
     Random random = new Random();
@@ -51,7 +50,7 @@ public class DungeonMasterAg extends Agent {
     class MainLoop extends CyclicBehaviour { //Needs implementing: waiting for player, initiating the game
         DungeonMasterAg agent;
         ContentManager cm;
-        String prompt;
+        String prompt = "Welcome to the dungeon of lost souls, prepare for the mighty fight";
 
         public MainLoop(DungeonMasterAg agent) {
             this.agent = agent;
@@ -106,14 +105,23 @@ public class DungeonMasterAg extends Agent {
 
                         if (action instanceof AttackEnemy){
                             AttackEnemy combatAction = (AttackEnemy) action;
+                            String attPromptMess = "";
+                            String user = mess.getSender().getLocalName().equalsIgnoreCase(player.getLocalName()) ? "Player" : "Goblin "+getMarker(mess.getSender());
+                            String usedOn = combatAction.getEnemyID().equals("*") ? "Player" : "Goblin "+combatAction.getEnemyID();
+                            attPromptMess += user+ " Used "+combatAction.getAttackType().getAttackName()+" on "+usedOn+", and it";
+
                             if (random.nextInt(100)<combatAction.getAttackType().getAccuracy()){
+                                attPromptMess += " did "+combatAction.getAttackType().getDamage()+" damage\n";
                                 ActiveChar actChar = DamageCharacter(combatAction.getEnemyID(), combatAction.getAttackType().getDamage());
+
                                 if (actChar.health <= 0 && actChar.id != player){
+                                    prompt += attPromptMess;
+                                    prompt += "Goblin "+actChar.marker+" have suffered a horrible death\n";
                                     activeCharacters.remove(actChar);
                                     map.killEntity(actChar.id);
-                                    say("Pavyko nudet viena goblina");
                                     try
                                     {
+                                        System.out.println("Killing "+actChar.id.getLocalName());
                                         AgentContainer mc = agent.getContainerController();
                                         AgentController actrl = mc.getAgent(actChar.id.getLocalName(), AID.ISLOCALNAME);
                                         actrl.kill();
@@ -122,7 +130,10 @@ public class DungeonMasterAg extends Agent {
                                     //Prompt about killing a goblin
                                 }
                             }
-
+                            else{
+                                attPromptMess += " missed really badly :/\n";
+                                prompt += attPromptMess;
+                            }
                         }
                         else{
                             MoveAction mvAction = (MoveAction) action;
@@ -159,8 +170,13 @@ public class DungeonMasterAg extends Agent {
 
         void sendActionRequest() { //Here we should ask character whose turn it is to make an action, also we should somehow define on what actions can he make in that situation
             ActiveChar turnOf = activeCharacters.get(turn);
-            sendSituationMessage(turnOf.id, map, map.getOptions(turnOf.id), "Something have happened", turnOf.health, getIsWon(), getIsLost());
-
+            if (prompt.equalsIgnoreCase("")){
+                prompt="Nothing interesting happened :(\n";
+            }
+            sendSituationMessage(turnOf.id, map, map.getOptions(turnOf.id), prompt, turnOf.health, getIsWon(), getIsLost());
+            if (turnOf.id.getLocalName().equalsIgnoreCase(player.getLocalName())){
+                prompt = "";
+            }
         }
 
         void manageRegister(AID sender) {
@@ -231,7 +247,7 @@ public class DungeonMasterAg extends Agent {
         @Override
         public void action() {
             AgentContainer cont = myAgent.getContainerController();
-            activeCharacters.add(new ActiveChar(player, "*", 50));
+            activeCharacters.add(new ActiveChar(player, "*", 5000));
             String[] markers = new String[]{"a", "b", "c", "d", "e"};
             for (int i = 0; i < 5; i++) {
                 try {
@@ -247,29 +263,6 @@ public class DungeonMasterAg extends Agent {
             }
             map = new Map(player, bots);
             isStarted = true;
-            /*
-            AvailableOptions options = new AvailableOptions();
-            MoveOptions move = new MoveOptions();
-            AttackOptions attack = new AttackOptions();
-            move.addDir("UP");
-            move.addDir("LEFT");
-            move.addDir("RIGHT");
-            AttackEnemy atackene = new AttackEnemy();
-            Attack a = new Attack();
-            a.setAccuracy(2);
-            a.setAttackName("Smugis koja");
-            a.setDamage(5);
-            a.setRange(1);
-            a.setAttackDescription("Spyrixs kojaiii");
-
-            atackene.setAttackType(a);
-            atackene.setEnemyID("555");
-
-            attack.addAttackEnemyy(atackene);
-            options.setMvOpts(move);
-            options.setAttOpts(attack);
-            sendSituationMessage(player, map, options, "Game is starting", 5, false, false);
-            */
 
         }
     }
@@ -300,11 +293,8 @@ public class DungeonMasterAg extends Agent {
         }
         send(response);
         if (sendTO == player){
-            if (won){
-                System.out.println("The game is won, congrats");
-            }
-            if (lost){
-                System.out.println("The game is lost :(");
+            if (won || lost){
+                Reset();
             }
         }
         //System.out.println("Zinute issiusta su mapais"+response);
@@ -312,7 +302,31 @@ public class DungeonMasterAg extends Agent {
     }
     //--Simple Methods--
 
+    public void Reset(){
+        activeCharacters = new ArrayList<>();
+        bots = new ArrayList<>();
+        isStarted = false;
+        turn = 0;
+        for (AID bot: bots){
 
+            try
+            {
+                AgentContainer mc = this.getContainerController();
+                AgentController actrl = mc.getAgent(bot.getLocalName(), AID.ISLOCALNAME);
+                actrl.kill();
+            }
+            catch (Exception ex) {}
+        }
+    }
+
+    public String getMarker(AID id){
+        for (ActiveChar actChar:activeCharacters){
+            if (actChar.id.getLocalName().equalsIgnoreCase(id.getLocalName())){
+                return actChar.marker;
+            }
+        }
+        return " ";
+    }
 
     public ActiveChar DamageCharacter(String marker, Integer damage){
         for (ActiveChar actChar:activeCharacters){
