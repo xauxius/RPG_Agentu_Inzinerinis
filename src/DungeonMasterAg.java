@@ -233,7 +233,7 @@ public class DungeonMasterAg extends Agent {
                 }
             }
             map = new Map(player, bots);
-            /*
+
             AvailableOptions options = new AvailableOptions();
             MoveOptions move = new MoveOptions();
             AttackOptions attack = new AttackOptions();
@@ -242,7 +242,7 @@ public class DungeonMasterAg extends Agent {
             move.addDir("RIGHT");
             AttackEnemy atackene = new AttackEnemy();
             Attack a = new Attack();
-            a.setAccuracy("2");
+            a.setAccuracy(2);
             a.setAttackName("Smugis koja");
             a.setDamage(5);
             a.setRange(1);
@@ -254,8 +254,8 @@ public class DungeonMasterAg extends Agent {
             attack.addAttackEnemyy(atackene);
             options.setMvOpts(move);
             options.setAttOpts(attack);
-            sendSituationMessage(player, map, options, "Game is starting");
-             */
+            sendSituationMessage(player, map, options, "Game is starting", 5, false, false);
+
 
         }
     }

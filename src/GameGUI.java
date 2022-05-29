@@ -29,6 +29,9 @@ public class GameGUI extends javax.swing.JFrame {
     public void ChangeMap(String string){
         MapTextArea.setText(string);
     }
+    public void ChangeLiveNumber(Integer number){
+        LivesNumber.setText(String.valueOf(number));
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.

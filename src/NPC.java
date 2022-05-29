@@ -20,7 +20,7 @@ public class NPC extends Agent {
         addBehaviour(new ProcessActionRequest());
     }
 
-    class ProcessActionRequest() extends CyclicBehaviour {
+    class ProcessActionRequest extends CyclicBehaviour {
 
         @Override
         public void action() {
