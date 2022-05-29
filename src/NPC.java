@@ -50,7 +50,6 @@ public class NPC extends Agent {
                         Object randOb = allOpts[rand.nextInt(i)];
                         response.setFinalAction(randOb);
 
-                        System.out.println(response.getFinalAction());
                         ACLMessage oms = formMSG(mess.getSender());
                         cm.fillContent(oms, response);
                         send(oms);
