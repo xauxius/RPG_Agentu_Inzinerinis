@@ -231,7 +231,7 @@ public class DungeonMasterAg extends Agent {
         @Override
         public void action() {
             AgentContainer cont = myAgent.getContainerController();
-            activeCharacters.add(new ActiveChar(player, "*", 50));
+            activeCharacters.add(new ActiveChar(player, "*", 1));
             String[] markers = new String[]{"a", "b", "c", "d", "e"};
             for (int i = 0; i < 5; i++) {
                 try {

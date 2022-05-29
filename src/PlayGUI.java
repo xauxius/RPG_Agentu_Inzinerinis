@@ -108,7 +108,6 @@ public class PlayGUI extends GuiAgent {
             }
             else{
                 int attackInd = index-mLen;
-                System.out.println(attackInd);
                 AttackOptions action = new AttackOptions();
                 ACLMessage response = new ACLMessage(ACLMessage.INFORM);
                 response.setLanguage(codec.getName());
@@ -196,8 +195,6 @@ public class PlayGUI extends GuiAgent {
                 ContentManager cm = agent.getCM();
                 try {
                     ContentElement c = cm.extractContent(msg);
-
-                    System.out.println("A[" + getLocalName() + "] Message received hereee");
                     if (c instanceof DungeonMastersListResponse) {
                         DungeonMastersListResponse dmsList = (DungeonMastersListResponse) c;
                         Iterator dmIter = dmsList.getAllDMsList();
@@ -234,7 +231,21 @@ public class PlayGUI extends GuiAgent {
                         System.arraycopy(aopt, 0, result, mLen, aLen);
                         myGui.ChangeLiveNumber(response.getHealth());
                         DungeonMasterAID = msg.getSender();
+                        boolean won = response.getGameWon();
+                        boolean lost = response.getGameLost();
                         myGui.ChangeSelection(result);
+                        if(won){
+                            myGui.ChangeMap("\n\n\n\n\n    Congratulations \n        You won!");
+                            String[] strings = { "" };
+                            myGui.ChangeSelection(strings);
+                        }
+                        else if(lost){
+                            myGui.ChangeMap("\n\n\n\n\n      Game over :(");
+                            String[] strings = { "" };
+                            myGui.ChangeSelection(strings);
+                        }
+
+
 
                     }
                 } catch (Exception ex) {
