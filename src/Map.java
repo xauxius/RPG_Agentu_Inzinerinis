@@ -61,10 +61,10 @@ public class Map {
         punch.setAttackName("Face punch");
 
         Attack spell = new Attack();
-        spell.setAccuracy(100);
+        spell.setAccuracy(80);
         spell.setDamage(50);
         spell.setRange(5);
-        spell.setAttackName("Simple spell");
+        spell.setAttackName("Deadly spell");
         atts.add(kick);
         atts.add(punch);
         atts.add(spell);
