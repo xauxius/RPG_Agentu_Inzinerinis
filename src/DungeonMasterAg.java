@@ -10,7 +10,8 @@ import jade.core.behaviours.CyclicBehaviour;
 import jade.core.behaviours.OneShotBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
-import jade.wrapper.*;
+import jade.wrapper.AgentContainer;
+import jade.wrapper.AgentController;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -86,9 +87,8 @@ public class DungeonMasterAg extends Agent {
                         GameAction ga = (GameAction) c;
                         manageJoin(mess.getSender(), ga);
                     }
-                }
-                catch (Exception ex){
-                    say("Something bad with gotten message: "+ex.getMessage());
+                } catch (Exception ex) {
+                    say("Something bad with gotten message: " + ex.getMessage());
                 }
             }
         }
@@ -97,48 +97,48 @@ public class DungeonMasterAg extends Agent {
         void processActionResponse() { //Here we should process the action message from character
             ACLMessage mess = agent.receive();
 
-            if (mess != null){
-                try{
+            if (mess != null) {
+                try {
                     ContentElement c = cm.extractContent(mess);
-                    if (c instanceof SituationResponse && mess.getSender().getName().equalsIgnoreCase(activeCharacters.get(turn).id.getName())){
+                    if (c instanceof SituationResponse && mess.getSender().getName().equalsIgnoreCase(activeCharacters.get(turn).id.getName())) {
                         SituationResponse response = (SituationResponse) c;
                         Object action = response.getFinalAction();
 
-                        if (action instanceof AttackEnemy){
+                        if (action instanceof AttackEnemy) {
                             AttackEnemy combatAction = (AttackEnemy) action;
                             String attPromptMess = "";
-                            String user = mess.getSender().getLocalName().equalsIgnoreCase(player.getLocalName()) ? "Player" : "Goblin "+getMarker(mess.getSender());
-                            String usedOn = combatAction.getEnemyID().equals("*") ? "Player" : "Goblin "+combatAction.getEnemyID();
-                            attPromptMess += user+ " Used "+combatAction.getAttackType().getAttackName()+" on "+usedOn+", and it";
+                            String user = mess.getSender().getLocalName().equalsIgnoreCase(player.getLocalName()) ? "Player" : "Goblin " + getMarker(mess.getSender());
+                            String usedOn = combatAction.getEnemyID().equals("*") ? "Player" : "Goblin " + combatAction.getEnemyID();
+                            attPromptMess += user + " Used " + combatAction.getAttackType().getAttackName() + " on " + usedOn + ", and it";
 
-                            if (random.nextInt(100)<combatAction.getAttackType().getAccuracy()){
-                                attPromptMess += " did "+combatAction.getAttackType().getDamage()+" damage\n";
+                            if (random.nextInt(100) < combatAction.getAttackType().getAccuracy()) {
+                                attPromptMess += " did " + combatAction.getAttackType().getDamage() + " damage\n";
                                 ActiveChar actChar = DamageCharacter(combatAction.getEnemyID(), combatAction.getAttackType().getDamage());
 
-                                if (actChar.health <= 0 && actChar.id != player){
-                                    prompt += "Goblin "+actChar.marker+" have suffered a horrible death\n";
+                                if (actChar.health <= 0 && actChar.id != player) {
+                                    prompt += "Goblin " + actChar.marker + " have suffered a horrible death\n";
                                     activeCharacters.remove(actChar);
                                     map.killEntity(actChar.id);
-                                    try
-                                    {
-                                        System.out.println("Killing "+actChar.id.getLocalName());
+                                    try {
+                                        System.out.println("Killing " + actChar.id.getLocalName());
                                         AgentContainer mc = agent.getContainerController();
                                         AgentController actrl = mc.getAgent(actChar.id.getLocalName(), AID.ISLOCALNAME);
                                         actrl.kill();
+                                    } catch (Exception ex) {
+                                        System.out.println("Killint nepavyko");
                                     }
-                                    catch (Exception ex) {System.out.println("Killint nepavyko");}
                                     //Prompt about killing a goblin
                                 }
                             }
-                            else{
+                            else {
                                 attPromptMess += " missed really badly :/\n";
                             }
                             prompt += attPromptMess;
                         }
-                        else{
+                        else {
                             MoveAction mvAction = (MoveAction) action;
                             Map.Dirs dir = Map.Dirs.Stay;
-                            switch (mvAction.getDirection()){
+                            switch (mvAction.getDirection()) {
                                 case Config.Up:
                                     dir = Map.Dirs.Up;
                                     break;
@@ -157,12 +157,11 @@ public class DungeonMasterAg extends Agent {
                             }
                             map.moveEntityByAID(mess.getSender(), dir);
                         }
-                        turn = (turn+1)%activeCharacters.size();
+                        turn = (turn + 1) % activeCharacters.size();
                         waitingForResp = false;
                     }
-                }
-                catch (Exception ex){
-                    say("processing action response error: "+ex.getMessage());
+                } catch (Exception ex) {
+                    say("processing action response error: " + ex.getMessage());
                 }
 
             }
@@ -170,11 +169,11 @@ public class DungeonMasterAg extends Agent {
 
         void sendActionRequest() { //Here we should ask character whose turn it is to make an action, also we should somehow define on what actions can he make in that situation
             ActiveChar turnOf = activeCharacters.get(turn);
-            if (prompt.equalsIgnoreCase("")){
-                prompt="Nothing interesting happened :(\n";
+            if (prompt.equalsIgnoreCase("")) {
+                prompt = "Nothing interesting happened :(\n";
             }
             sendSituationMessage(turnOf.id, map, map.getOptions(turnOf.id), prompt, turnOf.health, getIsWon(), getIsLost());
-            if (turnOf.id.getLocalName().equalsIgnoreCase(player.getLocalName())){
+            if (turnOf.id.getLocalName().equalsIgnoreCase(player.getLocalName())) {
                 prompt = "";
             }
         }
@@ -221,16 +220,17 @@ public class DungeonMasterAg extends Agent {
         }
     }
 
-    boolean getIsWon(){
+    boolean getIsWon() {
         ActiveChar actChar = activeCharacters.get(turn);
-        if (actChar.id == player){
+        if (actChar.id == player) {
             return map.isEnemiesCleared();
         }
         return false;
     }
-    boolean getIsLost(){
+
+    boolean getIsLost() {
         ActiveChar actChar = activeCharacters.get(turn);
-        if (actChar.health <= 0){
+        if (actChar.health <= 0) {
             return true;
         }
         return false;
@@ -257,8 +257,7 @@ public class DungeonMasterAg extends Agent {
                     AID botId = new AID(bot.getName(), AID.ISGUID);
                     bots.add(botId);
                     activeCharacters.add(new ActiveChar(botId, markers[i], 20));
-                }
-                catch (Exception e){
+                } catch (Exception e) {
                     say("Something ain't right");
                 }
             }
@@ -269,7 +268,7 @@ public class DungeonMasterAg extends Agent {
     }
     //----
 
-    public void sendSituationMessage(AID sendTO, Map map, AvailableOptions options, String promt, Integer health, boolean won, boolean lost){
+    public void sendSituationMessage(AID sendTO, Map map, AvailableOptions options, String promt, Integer health, boolean won, boolean lost) {
         Ontology onto = RPGOntology.getInstance();
         Codec codec = new SLCodec();
         ContentManager cm = getContentManager();
@@ -293,44 +292,42 @@ public class DungeonMasterAg extends Agent {
             e.printStackTrace();
         }
         send(response);
-        if (sendTO == player){
-            if (won || lost){
+        if (sendTO == player) {
+            if (won || lost) {
                 Reset();
             }
         }
-        //System.out.println("Zinute issiusta su mapais"+response);
         waitingForResp = true;
     }
     //--Simple Methods--
 
-    public void Reset(){
+    public void Reset() {
         activeCharacters = new ArrayList<>();
         isStarted = false;
         turn = 0;
-        for (AID bot: bots){
-            try
-            {
+        for (AID bot : bots) {
+            try {
                 AgentContainer mc = this.getContainerController();
                 AgentController actrl = mc.getAgent(bot.getLocalName(), AID.ISLOCALNAME);
                 actrl.kill();
+            } catch (Exception ex) {
             }
-            catch (Exception ex) {}
         }
         bots = new ArrayList<>();
     }
 
-    public String getMarker(AID id){
-        for (ActiveChar actChar:activeCharacters){
-            if (actChar.id.getLocalName().equalsIgnoreCase(id.getLocalName())){
+    public String getMarker(AID id) {
+        for (ActiveChar actChar : activeCharacters) {
+            if (actChar.id.getLocalName().equalsIgnoreCase(id.getLocalName())) {
                 return actChar.marker;
             }
         }
         return " ";
     }
 
-    public ActiveChar DamageCharacter(String marker, Integer damage){
-        for (ActiveChar actChar:activeCharacters){
-            if (actChar.marker.equals(marker)){
+    public ActiveChar DamageCharacter(String marker, Integer damage) {
+        for (ActiveChar actChar : activeCharacters) {
+            if (actChar.marker.equals(marker)) {
                 actChar.health -= damage;
                 return actChar;
             }
@@ -365,13 +362,13 @@ public class DungeonMasterAg extends Agent {
     void say(String text, String beh) {
         System.out.println("A[" + getLocalName() + "|" + beh + "]: " + text);
     }
-    //----
 
-    class ActiveChar{
+    class ActiveChar {
         public AID id;
         public String marker;
         public Integer health;
-        public ActiveChar(AID id, String marker, Integer health){
+
+        public ActiveChar(AID id, String marker, Integer health) {
             this.id = id;
             this.marker = marker;
             this.health = health;

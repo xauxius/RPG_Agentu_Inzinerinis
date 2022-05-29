@@ -15,6 +15,7 @@ import java.util.Random;
 //Class for bots
 public class NPC extends Agent {
     Random rand = new Random();
+
     @Override
     public void setup() {
         say("Graghh, i am a Goblin");
@@ -25,25 +26,25 @@ public class NPC extends Agent {
         @Override
         public void action() {
             ACLMessage mess = receive();
-            if (mess != null){
-                try{
+            if (mess != null) {
+                try {
                     ContentManager cm = getCM();
                     ContentElement c = cm.extractContent(mess);
-                    if (c instanceof SituationResponseRequest){
+                    if (c instanceof SituationResponseRequest) {
                         AvailableOptions opts = ((SituationResponseRequest) c).getOptions();
                         Integer attOptsN = opts.getAttOpts().getAttackEnemyy().size();
                         SituationResponse response = new SituationResponse();
-                        Object[] allOpts = new Object[opts.getMvOpts().getDir().size()+opts.getAttOpts().getAttackEnemyy().size()];
+                        Object[] allOpts = new Object[opts.getMvOpts().getDir().size() + opts.getAttOpts().getAttackEnemyy().size()];
                         int i = 0;
                         Iterator mvOpts = opts.getMvOpts().getAllDir();
                         Iterator atOpts = opts.getAttOpts().getAllAttackEnemyy();
-                        while (mvOpts.hasNext()){
+                        while (mvOpts.hasNext()) {
                             MoveAction mvAct = new MoveAction();
                             mvAct.setDirection((String) mvOpts.next());
                             allOpts[i] = mvAct;
                             i++;
                         }
-                        while(atOpts.hasNext()){
+                        while (atOpts.hasNext()) {
                             allOpts[i] = atOpts.next();
                             i++;
                         }
@@ -55,21 +56,19 @@ public class NPC extends Agent {
                         cm.fillContent(oms, response);
                         send(oms);
                     }
-                }
-                catch (Exception ex){
+                } catch (Exception ex) {
                     SituationResponse response = new SituationResponse();
                     MoveAction moveAct = new MoveAction();
                     moveAct.setDirection("Stay");
                     response.setFinalAction(moveAct);
                     ACLMessage oms = formMSG(mess.getSender());
-                    try{
+                    try {
                         getCM().fillContent(oms, response);
-                    }
-                    catch (Exception exe){
+                    } catch (Exception exe) {
                         say("Welp, idk now");
                     }
                     send(oms);
-                    say("Could not take action, that will freeze the game: "+ex.getMessage());
+                    say("Could not take action, that will freeze the game: " + ex.getMessage());
                 }
 
             }

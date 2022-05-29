@@ -129,7 +129,6 @@ public class DMsProvider extends Agent {
 
     }
 
-
     public ContentManager getCM() {
         Ontology onto = RPGOntology.getInstance();
         Codec codec = new SLCodec();

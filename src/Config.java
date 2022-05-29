@@ -1,8 +1,3 @@
-import RPG.ontology.RPGOntology;
-import jade.content.ContentManager;
-import jade.content.lang.Codec;
-import jade.content.lang.sl.SLCodec;
-import jade.content.onto.Ontology;
 import jade.core.Agent;
 
 public class Config extends Agent {
